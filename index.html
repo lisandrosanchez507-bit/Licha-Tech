@@ -54,6 +54,9 @@ footer{background:#111;text-align:center;padding:20px;color:#777}
 <section id="admin" class="hidden">
 <h2> Panel Admin</h2>
 <div class="admin" id="adminMensajes"></div>
+<div style="margin-top:15px;">
+  <button onclick="vaciarChat()">Vaciar todo el chat</button>
+</div>
 </section>
 
 <section class="youtube">
@@ -159,6 +162,21 @@ function responder(id){
   db.collection("mensajes").doc(id).update({respuesta})
     .then(()=> alert("Respuesta enviada"))
     .catch(e=> alert("Error al responder: "+e.message));
+}
+
+// Función para vaciar todo el chat (solo admin)
+function vaciarChat(){
+  if(!confirm("⚠️ Esto borrará todos los mensajes y respuestas. ¿Querés continuar?")) return;
+
+  db.collection("mensajes").get().then(snapshot=>{
+    const batch = db.batch();
+    snapshot.forEach(doc => {
+      batch.delete(doc.ref);
+    });
+    return batch.commit();
+  })
+  .then(()=> alert("Chat vaciado correctamente."))
+  .catch(e => alert("Error al vaciar el chat: " + e.message));
 }
 
 // Cerrar sesión
