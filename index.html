@@ -23,8 +23,8 @@ footer{background:#111;text-align:center;padding:20px;color:#777}
 <body>
 <header>
 <h1>Licha Tech</h1>
-<p>Servicio técnico en Informatica. Hacé tu pregunta y te respondo personalmente.</p>
-</header><section id="auth">
+<p>Servicio técnico. Hacé tu pregunta y te respondo personalmente.</p>
+</header><section id="authDiv">
 <h2>🔐 Ingresar / Registrarse</h2>
 <div class="chat-box">
 <input id="email" placeholder="Email"><br><br>
@@ -61,6 +61,11 @@ firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth();
 const db=firebase.firestore();
 const ADMIN_EMAIL="lisandrosanchez507@gmail.com";
+
+const authDiv=document.getElementById("authDiv");
+const chat=document.getElementById("chat");
+const admin=document.getElementById("admin");
+const adminMensajes=document.getElementById("adminMensajes");
 
 function registrar(){auth.createUserWithEmailAndPassword(email.value,password.value).catch(e=>alert(e.message));}
 function login(){auth.signInWithEmailAndPassword(email.value,password.value).catch(e=>alert(e.message));}
