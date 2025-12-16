@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Licha Tech | Preguntas y Respuestas</title>
-
-  <style>
+  <title>Licha Tech | Preguntas y Respuestas</title>  <style>
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
@@ -22,6 +19,12 @@
       font-size: 2.5rem;
       color: #00b4ff;
     }
+    header p {
+      max-width: 700px;
+      margin: 15px auto 0;
+      font-size: 1.1rem;
+      color: #cccccc;
+    }
     section {
       padding: 40px 20px;
       max-width: 900px;
@@ -31,22 +34,28 @@
       color: #00b4ff;
       margin-bottom: 20px;
     }
-    .box {
+    .chat-box {
       background-color: #1c1c1c;
       padding: 20px;
       border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
       margin-bottom: 20px;
     }
-    input, textarea {
+    .chat-input {
+      display: flex;
+      gap: 10px;
+    }
+    .chat-input textarea {
       width: 100%;
       padding: 12px;
       border-radius: 8px;
       border: none;
+      resize: none;
       background-color: #2a2a2a;
       color: #ffffff;
-      margin-bottom: 10px;
+      font-size: 1rem;
     }
-    button {
+    .chat-input button {
       background-color: #00b4ff;
       border: none;
       padding: 12px 18px;
@@ -55,86 +64,55 @@
       font-weight: bold;
       color: #ffffff;
     }
-    .msg {
-      margin-bottom: 8px;
-      color: #bdbdbd;
+    .youtube, .activacion {
+      text-align: center;
     }
     .btn {
       display: inline-block;
+      margin-top: 15px;
       padding: 12px 25px;
       border-radius: 8px;
       font-weight: bold;
       text-decoration: none;
       color: #ffffff;
     }
-    .btn-youtube { background-color: #ff0000; }
-    .btn-activacion { background-color: #00b4ff; }
+    .btn-youtube {
+      background-color: #ff0000;
+    }
     footer {
       background-color: #111;
       text-align: center;
       padding: 20px;
       color: #777;
+      font-size: 0.9rem;
     }
-  </style>
-</head>
-
-<body>
-
-<header>
+  </style></head><body><header>
   <h1>Licha Tech</h1>
-  <p>Hacé tu pregunta y te respondo personalmente.</p>
-</header>
-
-<!-- LOGIN / REGISTRO -->
-<section id="authSection">
-  <h2>🔐 Iniciar sesión</h2>
-  <div class="box">
-    <input type="email" id="email" placeholder="Email" />
-    <input type="password" id="password" placeholder="Contraseña" />
-    <button onclick="register()">Registrarse</button>
-    <button onclick="login()">Entrar</button>
-    <p id="error" style="color:red;"></p>
+  <p>Servicio técnico en Informatica. Hacé tu pregunta y te respondo personalmente.</p>
+</header><section>
+  <h2>💬 Preguntas y Respuestas</h2>  <div class="chat-box">
+    <p>Escribí tu consulta sobre PC, notebooks, Windows, hardware o software.</p>
+  </div>  <div class="chat-input">
+    <textarea id="mensaje" rows="4" placeholder="Escribí tu pregunta acá..."></textarea>
+    <button id="enviar">Enviar</button>
   </div>
-</section>
-
-<!-- CHAT -->
-<section id="chatSection" style="display:none;">
-  <h2>💬 Preguntas y Respuestas</h2>
-  <div class="box" id="messages"></div>
-  <textarea id="messageInput" placeholder="Escribí tu pregunta..."></textarea>
-  <button onclick="sendMessage()">Enviar</button>
-</section>
-
-<!-- YOUTUBE -->
-<section class="youtube" style="display:none;">
+</section><section class="youtube">
   <h2>📺 Canal de YouTube</h2>
-  <a href="https://www.youtube.com/@LichaTech" target="_blank"
-     class="btn btn-youtube">Ir al canal</a>
-</section>
-
-<!-- ACTIVACION -->
-<section class="activacion" style="display:none;">
- <h2>🔑 Activación de Windows</h2>
-    <p>Para activar tu Windows con licencia válida, seguí estos pasos:</p>
-    <ol>
-      <li>Copiá el siguiente comando.</li>
-      <li>Hacé clic izquierdo sobre el icono de Windows.</li>
-      <li>Seleccioná <strong>PowerShell (Administrador)</strong>.</li>
-      <li>Pegá el comando y ejecutalo.</li>
-    </ol>
-    <pre><code>irm https://get.activated.win | iex</code></pre>
-</section>
-
-<footer>
+  <p>Reparaciones reales, optimización y soluciones explicadas.</p>
+  <a href="https://www.youtube.com/@LichaTech" target="_blank" class="btn btn-youtube">Ir al canal</a>
+</section><section class="activacion">
+  <h2>🔑 Activación de Windows</h2>
+  <p>Para activar tu Windows con licencia válida, seguí estos pasos:</p>
+  <ol>
+    <li>Copiá el siguiente comando.</li>
+    <li>Hacé clic derecho en Inicio.</li>
+    <li>PowerShell (Administrador).</li>
+    <li>Pegá el comando y ejecutalo.</li>
+  </ol>
+  <pre><code>irm https://get.activated.win | iex</code></pre>
+</section><footer>
   © 2025 Licha Tech · Servicio Técnico Informático
-</footer>
-
-<!-- FIREBASE SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
-<script>
+</footer><!-- Firebase SDK --><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script>
   const firebaseConfig = {
     apiKey: "AIzaSyDPR40KPSX1BXu6nDOrZ2Muj-oyElZ1IQ8",
     authDomain: "licha-tech-ec128.firebaseapp.com",
@@ -145,50 +123,24 @@
   };
 
   firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
   const db = firebase.firestore();
 
-  function register() {
-    auth.createUserWithEmailAndPassword(email.value, password.value)
-      .catch(e => error.innerText = e.message);
-  }
+  document.getElementById("enviar").addEventListener("click", async () => {
+    const texto = document.getElementById("mensaje").value.trim();
 
-  function login() {
-    auth.signInWithEmailAndPassword(email.value, password.value)
-      .catch(e => error.innerText = e.message);
-  }
-
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      authSection.style.display = "none";
-      chatSection.style.display = "block";
-      document.querySelector(".youtube").style.display = "block";
-      document.querySelector(".activacion").style.display = "block";
-      loadMessages();
+    if (!texto) {
+      alert("Escribí un mensaje primero");
+      return;
     }
-  });
 
-  function sendMessage() {
-    if (!messageInput.value) return;
-    db.collection("messages").add({
-      text: messageInput.value,
-      user: auth.currentUser.email,
-      time: firebase.firestore.FieldValue.serverTimestamp()
+    await db.collection("mensajes").add({
+      texto: texto,
+      fecha: firebase.firestore.FieldValue.serverTimestamp(),
+      origen: window.location.href
     });
-    messageInput.value = "";
-  }
 
-  function loadMessages() {
-    db.collection("messages").orderBy("time")
-      .onSnapshot(snap => {
-        messages.innerHTML = "";
-        snap.forEach(doc => {
-          const d = doc.data();
-          messages.innerHTML += `<div class="msg"><b>${d.user}:</b> ${d.text}</div>`;
-        });
-      });
-  }
-</script>
-
-</body>
+    document.getElementById("mensaje").value = "";
+    alert("Mensaje enviado ✔");
+  });
+</script></body>
 </html>
