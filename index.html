@@ -5,26 +5,143 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Licha Tech | Preguntas y Respuestas</title>
 <style>
-body{margin:0;font-family:Arial;background:#0f0f0f;color:#fff}
-header{background:linear-gradient(135deg,#111,#1f1f1f);padding:40px 20px;text-align:center}
-header h1{margin:0;font-size:2.5rem;color:#00b4ff}
-section{padding:40px 20px;max-width:900px;margin:auto}
-h2{color:#00b4ff}
-.chat-box{background:#1c1c1c;padding:20px;border-radius:12px;margin-bottom:15px;overflow:auto;max-height:400px}
-.chat-input{display:flex;gap:10px}
-textarea,input{width:100%;padding:12px;border-radius:8px;border:none;background:#2a2a2a;color:#fff}
-button{background:#00b4ff;border:none;padding:12px 18px;border-radius:8px;font-weight:bold;cursor:pointer;color:#fff}
+/* Reset básico y body */
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#0f0f0f;
+  color:#fff;
+}
+
+/* Header / título principal */
+header{
+  background:linear-gradient(135deg,#111,#1f1f1f);
+  padding:40px 20px;
+  text-align:center;
+}
+header h1{
+  margin:0;
+  font-size:2.5rem;
+  color:#00b4ff;
+}
+header p{
+  margin-top:10px;
+  color:#aaa;
+}
+
+/* Secciones generales */
+section{
+  padding:40px 20px;
+  max-width:900px;
+  margin:auto;
+}
+h2{
+  color:#00b4ff;
+  margin-bottom:15px;
+}
+
+/* Chat y entradas */
+.chat-box{
+  background:#1c1c1c;
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:15px;
+  overflow:auto;
+  max-height:400px;
+}
+.chat-input{
+  display:flex;
+  gap:10px;
+}
+textarea,input{
+  width:100%;
+  padding:12px;
+  border-radius:8px;
+  border:none;
+  background:#2a2a2a;
+  color:#fff;
+}
+button{
+  background:#00b4ff;
+  border:none;
+  padding:12px 18px;
+  border-radius:8px;
+  font-weight:bold;
+  cursor:pointer;
+  color:#fff;
+}
 .hidden{display:none}
-.admin{border:2px solid #00b4ff;border-radius:12px;padding:15px;margin-top:20px;max-height:400px;overflow:auto}
-.btn{display:inline-block;margin-top:15px;padding:12px 25px;border-radius:8px;font-weight:bold;text-decoration:none;color:#fff}
-.btn-youtube{background:#ff0000}
-footer{background:#111;text-align:center;padding:20px;color:#777}
+
+/* Panel admin */
+.admin{
+  border:2px solid #00b4ff;
+  border-radius:12px;
+  padding:15px;
+  margin-top:20px;
+  max-height:400px;
+  overflow:auto;
+}
+
+/* Botones y enlaces */
+.btn{
+  display:inline-block;
+  margin-top:15px;
+  padding:12px 25px;
+  border-radius:8px;
+  font-weight:bold;
+  text-decoration:none;
+  color:#fff;
+}
+.btn-youtube{
+  background:#ff0000;
+}
+
+/* Footer */
+footer{
+  background:#111;
+  text-align:center;
+  padding:20px;
+  color:#777;
+}
+
+/* ------------------- FONDO DE SECCION YOUTUBE ------------------- */
+.youtube{
+  position: relative; /* necesario para overlay */
+  background-image: url('ruta-del-fondo.jpg'); /* reemplazá con tu imagen */
+  background-size: cover;
+  background-position: center;
+  padding:60px 20px;
+  margin-top:40px;
+  border-top: 2px solid #00b4ff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:20px;
+  color:white;
+}
+.youtube::before{
+  content:"";
+  position:absolute;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: rgba(0,180,255,0.05); /* leve efecto cyan */
+  pointer-events:none;
+  z-index:0;
+}
+.youtube h2,
+.youtube p,
+.youtube a{
+  position: relative;
+  z-index:1;
+  text-align:center;
+}
 </style>
 </head>
 <body>
+
 <header>
 <h1>Licha Tech</h1>
-<p>Servicio técnico. Hacé tu pregunta y te respondo personalmente.</p>
+<p>Servicio técnico en Informatica. Hacé tu pregunta y te respondo personalmente.</p>
 </header>
 
 <section id="authDiv">
@@ -39,11 +156,9 @@ footer{background:#111;text-align:center;padding:20px;color:#777}
 
 <section id="chat" class="hidden">
 <h2>💬 Preguntas</h2>
-
 <div style="text-align:right;margin-bottom:15px;">
   <button onclick="cerrarSesion()">Cerrar sesión</button>
 </div>
-
 <div class="chat-box" id="mensajes"></div>
 <div class="chat-input">
 <textarea id="mensaje" rows="3" placeholder="Escribí tu consulta..."></textarea>
@@ -59,6 +174,7 @@ footer{background:#111;text-align:center;padding:20px;color:#777}
 </div>
 </section>
 
+<!-- SECCIÓN DE YOUTUBE CON FONDO -->
 <section class="youtube">
 <h2>📺 Canal de YouTube</h2>
 <p>Reparaciones reales, optimización y soluciones explicadas.</p>
@@ -78,6 +194,7 @@ footer{background:#111;text-align:center;padding:20px;color:#777}
 
 <footer>© 2025 Licha Tech · Servicio Técnico Informático</footer>
 
+<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -99,10 +216,8 @@ const authDiv=document.getElementById("authDiv");
 const chat=document.getElementById("chat");
 const admin=document.getElementById("admin");
 const adminMensajes=document.getElementById("adminMensajes");
+let respuestasPrevias={};
 
-let respuestasPrevias = {}; // Para notificaciones de nuevas respuestas
-
-// Registrar y login
 function registrar(){
   auth.createUserWithEmailAndPassword(email.value,password.value)
     .catch(e=>alert(e.message));
@@ -111,50 +226,39 @@ function login(){
   auth.signInWithEmailAndPassword(email.value,password.value)
     .catch(e=>alert(e.message));
 }
-
-// Enviar mensaje con confirmación y alerta
 function enviarMensaje(){
   const t=mensaje.value.trim();
   if(!t)return;
   db.collection("mensajes").add({
-    texto: t,
-    fecha: firebase.firestore.FieldValue.serverTimestamp(),
-    user: auth.currentUser.email,
-    respuesta: "" // Inicialmente vacía
-  })
-  .then(()=>{ mensaje.value=""; })
-  .catch(e=>alert("Error al enviar el mensaje: "+e.message));
+    texto:t,
+    fecha:firebase.firestore.FieldValue.serverTimestamp(),
+    user:auth.currentUser.email,
+    respuesta:""
+  }).then(()=>{mensaje.value="";}).catch(e=>alert("Error al enviar el mensaje: "+e.message));
 }
-
-// Escuchar mensajes en tiempo real
 db.collection("mensajes").orderBy("fecha","asc").onSnapshot(snapshot=>{
   const cont=document.getElementById("mensajes");
   cont.innerHTML="";
   snapshot.forEach(doc=>{
     const data=doc.data();
-    const hora=data.fecha ? new Date(data.fecha.toDate()).toLocaleTimeString() : '';
-    
-    if(auth.currentUser && auth.currentUser.email === data.user){
-      cont.innerHTML+=`<p><b>${data.user}</b> [${hora}]: ${data.texto}</p>` +
-        (data.respuesta ? `<p style="margin-left:20px;color:#0f0">Admin: ${data.respuesta}</p>` : '');
-      
-      // NOTIFICACIÓN si hay respuesta nueva
-      if(data.respuesta && respuestasPrevias[doc.id] !== data.respuesta){
-        respuestasPrevias[doc.id] = data.respuesta;
+    const hora=data.fecha?new Date(data.fecha.toDate()).toLocaleTimeString():'';
+    if(auth.currentUser && auth.currentUser.email===data.user){
+      cont.innerHTML+=`<p><b>${data.user}</b> [${hora}]: ${data.texto}</p>`+
+        (data.respuesta?`<p style="margin-left:20px;color:#0f0">Admin: ${data.respuesta}</p>`:'');
+      if(data.respuesta && respuestasPrevias[doc.id]!==data.respuesta){
+        respuestasPrevias[doc.id]=data.respuesta;
         mostrarNotificacion(`Nueva respuesta del admin: ${data.respuesta}`);
       }
     }
   });
-
-  // Panel admin
   if(auth.currentUser && auth.currentUser.email===ADMIN_EMAIL){
     adminMensajes.innerHTML="";
     snapshot.forEach(doc=>{
       const data=doc.data();
-      const hora=data.fecha ? new Date(data.fecha.toDate()).toLocaleTimeString() : '';
+      const hora=data.fecha?new Date(data.fecha.toDate()).toLocaleTimeString():'';
       adminMensajes.innerHTML+=`
         <p><b>${data.user}</b> [${hora}]: ${data.texto}</p>
-        <p style="margin-left:20px;color:#0f0">Respuesta: ${data.respuesta || ""}</p>
+        <p style="margin-left:20px;color:#0f0">Respuesta: ${data.respuesta||""}</p>
         <input type="text" id="resp-${doc.id}" placeholder="Escribí la respuesta..." style="width:70%;margin-right:5px;">
         <button onclick="responder('${doc.id}')">Responder</button>
         <hr>
@@ -162,49 +266,37 @@ db.collection("mensajes").orderBy("fecha","asc").onSnapshot(snapshot=>{
     });
   }
 });
-
-// Función para que el admin responda
 function responder(id){
-  const respuesta = document.getElementById(`resp-${id}`).value.trim();
-  if(!respuesta) return alert("Escribí algo antes de responder");
+  const respuesta=document.getElementById(`resp-${id}`).value.trim();
+  if(!respuesta)return alert("Escribí algo antes de responder");
   db.collection("mensajes").doc(id).update({respuesta})
-    .then(()=> alert("Respuesta enviada"))
-    .catch(e=> alert("Error al responder: "+e.message));
+    .then(()=>alert("Respuesta enviada"))
+    .catch(e=>alert("Error al responder: "+e.message));
 }
-
-// Función para vaciar todo el chat (solo admin)
 function vaciarChat(){
-  if(!confirm("⚠️ Esto borrará todos los mensajes y respuestas. ¿Querés continuar?")) return;
-
+  if(!confirm("⚠️ Esto borrará todos los mensajes y respuestas. ¿Querés continuar?"))return;
   db.collection("mensajes").get().then(snapshot=>{
-    const batch = db.batch();
-    snapshot.forEach(doc => {
-      batch.delete(doc.ref);
-    });
+    const batch=db.batch();
+    snapshot.forEach(doc=>batch.delete(doc.ref));
     return batch.commit();
-  })
-  .then(()=> alert("Chat vaciado correctamente."))
-  .catch(e => alert("Error al vaciar el chat: " + e.message));
+  }).then(()=>alert("Chat vaciado correctamente."))
+  .catch(e=>alert("Error al vaciar el chat: "+e.message));
 }
-
-// Función para mostrar notificación tipo toast
 function mostrarNotificacion(mensaje){
-  const toast = document.createElement("div");
-  toast.innerText = mensaje;
-  toast.style.position = "fixed";
-  toast.style.bottom = "20px";
-  toast.style.right = "20px";
-  toast.style.background = "#00b4ff";
-  toast.style.color = "#fff";
-  toast.style.padding = "15px 20px";
-  toast.style.borderRadius = "8px";
-  toast.style.boxShadow = "0 2px 10px rgba(0,0,0,0.5)";
-  toast.style.zIndex = 9999;
+  const toast=document.createElement("div");
+  toast.innerText=mensaje;
+  toast.style.position="fixed";
+  toast.style.bottom="20px";
+  toast.style.right="20px";
+  toast.style.background="#00b4ff";
+  toast.style.color="#fff";
+  toast.style.padding="15px 20px";
+  toast.style.borderRadius="8px";
+  toast.style.boxShadow="0 2px 10px rgba(0,0,0,0.5)";
+  toast.style.zIndex=9999;
   document.body.appendChild(toast);
-  setTimeout(()=>{ document.body.removeChild(toast); }, 4000);
+  setTimeout(()=>{document.body.removeChild(toast);},4000);
 }
-
-// Cerrar sesión
 function cerrarSesion(){
   auth.signOut()
     .then(()=>{
@@ -215,16 +307,12 @@ function cerrarSesion(){
     })
     .catch(e=>alert("Error al cerrar sesión: "+e.message));
 }
-
-// Estado de autenticación
 auth.onAuthStateChanged(user=>{
   if(user){
     authDiv.style.display="none";
     chat.classList.remove("hidden");
-    if(user.email===ADMIN_EMAIL){
-      admin.classList.remove("hidden");
-    }
-  } else {
+    if(user.email===ADMIN_EMAIL) admin.classList.remove("hidden");
+  }else{
     chat.classList.add("hidden");
     admin.classList.add("hidden");
     authDiv.style.display="block";
