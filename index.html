@@ -15,7 +15,7 @@ h2{color:#00b4ff}
 textarea,input{width:100%;padding:12px;border-radius:8px;border:none;background:#2a2a2a;color:#fff}
 button{background:#00b4ff;border:none;padding:12px 18px;border-radius:8px;font-weight:bold;cursor:pointer;color:#fff}
 .hidden{display:none}
-.admin{border:2px solid #00b4ff;border-radius:12px;padding:15px;margin-top:20px;max-height:300px;overflow:auto}
+.admin{border:2px solid #00b4ff;border-radius:12px;padding:15px;margin-top:20px;max-height:400px;overflow:auto}
 .btn{display:inline-block;margin-top:15px;padding:12px 25px;border-radius:8px;font-weight:bold;text-decoration:none;color:#fff}
 .btn-youtube{background:#ff0000}
 footer{background:#111;text-align:center;padding:20px;color:#777}
@@ -52,7 +52,7 @@ footer{background:#111;text-align:center;padding:20px;color:#777}
 </section>
 
 <section id="admin" class="hidden">
-<h2>👑 Panel Admin</h2>
+<h2> Panel Admin</h2>
 <div class="admin" id="adminMensajes"></div>
 </section>
 
@@ -114,7 +114,8 @@ function enviarMensaje(){
   db.collection("mensajes").add({
     texto: t,
     fecha: firebase.firestore.FieldValue.serverTimestamp(),
-    user: auth.currentUser.email
+    user: auth.currentUser.email,
+    respuesta: "" // Inicialmente vacía
   })
   .then(()=>{ mensaje.value=""; })
   .catch(e=>alert("Error al enviar el mensaje: "+e.message));
@@ -127,7 +128,11 @@ db.collection("mensajes").orderBy("fecha","asc").onSnapshot(snapshot=>{
   snapshot.forEach(doc=>{
     const data=doc.data();
     const hora=data.fecha ? new Date(data.fecha.toDate()).toLocaleTimeString() : '';
-    cont.innerHTML+=`<p><b>${data.user}</b> [${hora}]: ${data.texto}</p>`;
+    // Mensajes del usuario con respuesta si existe
+    if(auth.currentUser && auth.currentUser.email === data.user){
+      cont.innerHTML+=`<p><b>${data.user}</b> [${hora}]: ${data.texto}</p>` +
+        (data.respuesta ? `<p style="margin-left:20px;color:#0f0">Admin: ${data.respuesta}</p>` : '');
+    }
   });
 
   // Panel admin
@@ -136,10 +141,25 @@ db.collection("mensajes").orderBy("fecha","asc").onSnapshot(snapshot=>{
     snapshot.forEach(doc=>{
       const data=doc.data();
       const hora=data.fecha ? new Date(data.fecha.toDate()).toLocaleTimeString() : '';
-      adminMensajes.innerHTML+=`<p><b>${data.user}</b> [${hora}]: ${data.texto}</p>`;
+      adminMensajes.innerHTML+=`
+        <p><b>${data.user}</b> [${hora}]: ${data.texto}</p>
+        <p style="margin-left:20px;color:#0f0">Respuesta: ${data.respuesta || ""}</p>
+        <input type="text" id="resp-${doc.id}" placeholder="Escribí la respuesta..." style="width:70%;margin-right:5px;">
+        <button onclick="responder('${doc.id}')">Responder</button>
+        <hr>
+      `;
     });
   }
 });
+
+// Función para que el admin responda
+function responder(id){
+  const respuesta = document.getElementById(`resp-${id}`).value.trim();
+  if(!respuesta) return alert("Escribí algo antes de responder");
+  db.collection("mensajes").doc(id).update({respuesta})
+    .then(()=> alert("Respuesta enviada"))
+    .catch(e=> alert("Error al responder: "+e.message));
+}
 
 // Cerrar sesión
 function cerrarSesion(){
