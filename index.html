@@ -10,8 +10,8 @@
 <style>
 :root{
   --bg-main:#0b0f14;
-  --bg-alt:#101d2b;
-  --panel:#161616;
+  --bg-alt:#05070a;
+  --panel:rgba(22, 22, 22, 0.85);
   --panel-2:#1e1e1e;
   --text:#ffffff;
   --muted:#9aa4af;
@@ -23,7 +23,7 @@
 body.light{
   --bg-main:#eef3f8;
   --bg-alt:#dde7f2;
-  --panel:#ffffff;
+  --panel:rgba(255, 255, 255, 0.9);
   --panel-2:#f1f1f1;
   --text:#0b0b0b;
   --muted:#555;
@@ -32,7 +32,6 @@ body.light{
 
 *{box-sizing:border-box}
 
-/* ANIMACIÓN DE ENTRADA PARA TODA LA WEB */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -43,33 +42,64 @@ body{
   font-family:'Satoshi',sans-serif;
   color:var(--text);
   background-color: var(--bg-main);
-  /* FONDO ADAPTATIVO PC/TV/MOVIL */
-  background-image: 
-    radial-gradient(circle at 20% 20%, rgba(0, 180, 255, 0.2), transparent 40%),
-    radial-gradient(circle at 80% 80%, rgba(0, 255, 180, 0.15), transparent 40%),
-    linear-gradient(135deg, var(--bg-main), var(--bg-alt), var(--bg-main));
-  background-attachment: fixed; /* Mantiene el fondo quieto al scrollear */
-  background-size: 400% 400%;
-  animation: fondoMovimiento 12s ease infinite, fadeInUp 1.2s ease-out;
   min-height: 100vh;
+  overflow-x: hidden;
+  /* Fondo base */
+  background-image: linear-gradient(to bottom, var(--bg-main), var(--bg-alt));
 }
 
-@keyframes fondoMovimiento {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+/* ===== EFECTO NEBULOSA (ANIMACIÓN DETRÁS) ===== */
+.nebula-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -2;
+  overflow: hidden;
+  background: var(--bg-main);
 }
 
-/* MALLA TECNOLÓGICA MEJORADA */
+.nebula {
+  position: absolute;
+  filter: blur(80px);
+  opacity: 0.4;
+  border-radius: 50%;
+  animation: float NebulaAnim 20s infinite alternate;
+}
+
+.n1 { 
+  width: 80vw; height: 80vh; 
+  background: radial-gradient(circle, rgba(0, 180, 255, 0.3), transparent);
+  top: -10%; left: -10%;
+  animation: move1 25s infinite alternate;
+}
+
+.n2 { 
+  width: 70vw; height: 70vh; 
+  background: radial-gradient(circle, rgba(0, 255, 180, 0.2), transparent);
+  bottom: -10%; right: -10%;
+  animation: move2 30s infinite alternate-reverse;
+}
+
+@keyframes move1 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(20%, 15%) scale(1.2); }
+}
+
+@keyframes move2 {
+  0% { transform: translate(0, 0) scale(1.1); }
+  100% { transform: translate(-25%, -10%) scale(0.9); }
+}
+
+/* MALLA TECNOLÓGICA (SOBRE LA NEBULOSA) */
 body::before {
   content: "";
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
   background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 30px 30px;
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
   z-index: -1;
   pointer-events: none;
 }
@@ -78,28 +108,20 @@ body::before {
 
 .topbar{
   position:relative;
-  background:rgba(0,0,0,.8);
+  background:rgba(0,0,0,0.6);
   backdrop-filter:blur(20px);
   border-bottom:2px solid var(--accent);
   z-index: 10;
 }
 
-header{
-  text-align:center;
-  padding:28px 20px 34px;
-}
+header{ text-align:center; padding:28px 20px 34px; }
 
 .title-anim{
   margin:0;
-  font-size:clamp(2rem, 8vw, 3.2rem); /* Tamaño fluido para TV y Celular */
+  font-size:clamp(2.2rem, 8vw, 3.5rem);
   letter-spacing:6px;
   color:var(--accent);
-  animation:glow 2.8s ease-in-out infinite alternate;
-}
-
-@keyframes glow{
-  from{ text-shadow:0 0 10px rgba(0,180,255,.4); }
-  to{ text-shadow: 0 0 25px rgba(0,180,255,.8), 0 0 45px rgba(0,180,255,.4); }
+  text-shadow: 0 0 15px rgba(0, 180, 255, 0.5);
 }
 
 section{
@@ -109,92 +131,60 @@ section{
   animation: fadeInUp 1s ease-out both;
 }
 
-/* Delay para que las secciones aparezcan una tras otra */
-section:nth-child(2) { animation-delay: 0.2s; }
-section:nth-child(3) { animation-delay: 0.4s; }
-
-.frange::before{
-  content:"";
-  display:block;
-  height:3px;
-  margin-bottom:20px;
-  background:linear-gradient(90deg,transparent,var(--accent),transparent);
-}
-
 .panel{
   background:var(--panel);
   border-radius:18px;
   padding:24px;
   box-shadow:var(--shadow);
-  border: 1px solid rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(5px);
 }
 
 input,textarea{
-  width:100%;
-  padding:14px;
-  margin-bottom:12px;
-  border-radius:12px;
-  border:none;
-  background:var(--panel-2);
-  color:var(--text);
+  width:100%; padding:14px; margin-bottom:12px;
+  border-radius:12px; border:none;
+  background:var(--panel-2); color:var(--text);
   outline: none;
 }
 
 button{
-  padding:14px 26px;
-  border:none;
-  border-radius:14px;
-  font-weight:600;
-  cursor:pointer;
-  color:#fff;
+  padding:14px 26px; border:none; border-radius:14px;
+  font-weight:600; cursor:pointer; color:#fff;
   background:linear-gradient(135deg,var(--accent),#006fa8);
-  transition: transform 0.2s, filter 0.2s;
+  transition: 0.3s;
 }
 
-button:hover{
-  transform: scale(1.03);
-  filter: brightness(1.1);
-}
+button:hover{ transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 180, 255, 0.4); }
 
-.chat-box{
-  max-height:420px;
-  overflow:auto;
-}
+.chat-box{ max-height:420px; overflow:auto; }
 
-.msg{margin-bottom:18px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;}
-.msg small{color:var(--muted)}
+.msg{ margin-bottom:18px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
 
 .youtube a{
-  display:inline-block;
-  margin-top:15px;
-  padding:14px 30px;
-  border-radius:14px;
-  background:#ff0000;
-  color:#fff;
-  font-weight:700;
-  text-decoration:none;
+  display:inline-block; margin-top:15px; padding:14px 30px;
+  border-radius:14px; background:#ff0000; color:#fff;
+  font-weight:700; text-decoration:none;
 }
 
 .activacion pre{
-  background:#111;
-  padding:16px;
-  border-radius:12px;
-  overflow-x: auto;
-  border: 1px solid var(--accent);
+  background:#000; padding:16px; border-radius:12px;
+  overflow-x: auto; border: 1px solid var(--accent);
+  color: #00ff00; /* Color verde código */
 }
 
-footer{
-  text-align:center;
-  padding:40px 25px;
-  color:var(--muted);
-}
+footer{ text-align:center; padding:40px 25px; color:var(--muted); }
 </style>
 </head>
 
 <body>
 
+<div class="nebula-container">
+  <div class="nebula n1"></div>
+  <div class="nebula n2"></div>
+</div>
+
 <div class="topbar">
-  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌙 Oscuro</button>
+  <button class="theme-btn" id="themeBtn" style="position:absolute; top:20px; right:20px;" onclick="toggleTheme()">🌙 Oscuro</button>
   <header>
     <h1 class="title-anim">Licha Tech</h1>
     <p>Reparación de PC y notebooks · Diagnóstico de hardware y software.</p>
@@ -226,7 +216,7 @@ footer{
   <h2>🛠 Panel Admin</h2>
   <div class="panel" id="adminMensajes"></div>
   <br>
-  <button class="danger" onclick="vaciarChat()">Vaciar chat</button>
+  <button class="danger" style="background:red" onclick="vaciarChat()">Vaciar chat</button>
 </section>
 
 <section class="youtube frange">
@@ -253,7 +243,7 @@ footer{
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
-// CONFIGURACIÓN FIREBASE
+// CONFIGURACIÓN FIREBASE (Mantenida exactamente igual)
 const firebaseConfig={
   apiKey:"AIzaSyDPR40KPSX1BXu6nDOrZ2Muj-oyElZ1IQ8",
   authDomain:"licha-tech-ec128.firebaseapp.com",
@@ -268,12 +258,8 @@ const auth=firebase.auth();
 const db=firebase.firestore();
 const ADMIN_EMAIL="lisandrosanchez507@gmail.com";
 
-function registrar(){
-  auth.createUserWithEmailAndPassword(email.value,password.value).catch(e=>alert(e.message));
-}
-function login(){
-  auth.signInWithEmailAndPassword(email.value,password.value).catch(e=>alert(e.message));
-}
+function registrar(){ auth.createUserWithEmailAndPassword(email.value,password.value).catch(e=>alert(e.message)); }
+function login(){ auth.signInWithEmailAndPassword(email.value,password.value).catch(e=>alert(e.message)); }
 function logout(){ auth.signOut(); }
 
 function enviarMensaje(){
