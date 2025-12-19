@@ -8,7 +8,6 @@
 <link href="https://fonts.cdnfonts.com/css/satoshi" rel="stylesheet">
 
 <style>
-/* ======= TODO TU CSS ORIGINAL, SIN TOCAR ======= */
 :root{
   --bg-main:#0b0f14;
   --bg-alt:#101d2b;
@@ -30,8 +29,13 @@ body.light{
   --accent:#007acc;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:'Satoshi',sans-serif;color:var(--text)}
+body{
+  margin:0;
+  font-family:'Satoshi',sans-serif;
+  color:var(--text);
+}
 .hidden{display:none}
+.panel{background:var(--panel);border-radius:18px;padding:24px}
 .msg{margin-bottom:18px}
 .msg small{color:var(--muted)}
 </style>
@@ -39,11 +43,94 @@ body{margin:0;font-family:'Satoshi',sans-serif;color:var(--text)}
 
 <body>
 
-<!-- ===== TODO TU HTML ORIGINAL, SIN TOCAR ===== -->
+<div class="topbar">
+  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌙 Oscuro</button>
+  <header>
+    <h1 class="title-anim">Licha Tech</h1>
+    <p>Reparación de PC y notebooks · Diagnóstico de hardware y software.</p>
+  </header>
+</div>
+
+<section id="auth" class="frange">
+  <h2>🔐 Acceso</h2>
+  <div class="panel">
+    <input id="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Contraseña">
+    <button onclick="registrar()">Registrarse</button>
+    <button onclick="login()">Entrar</button>
+  </div>
+</section>
+
+<section id="chat" class="hidden frange">
+  <h2>💬 Consultas</h2>
+  <div class="panel chat-box" id="mensajes"></div>
+  <div class="chat-input">
+    <textarea id="mensaje" rows="3" placeholder="Escribí tu consulta..."></textarea>
+    <button onclick="enviarMensaje()">Enviar</button>
+  </div>
+  <br>
+  <button onclick="logout()">Cerrar sesión</button>
+</section>
+
+<section id="admin" class="hidden frange">
+  <h2>🛠 Panel Admin</h2>
+  <div class="panel" id="adminMensajes"></div>
+  <br>
+  <button class="danger" onclick="vaciarChat()">Vaciar chat</button>
+</section>
+
+<section class="youtube frange">
+  <h2>📺 Canal de YouTube</h2>
+  <p>Contenido técnico y reparaciones reales.</p>
+  <a href="https://www.youtube.com/@LichaTech" target="_blank">Ir al canal</a>
+</section>
+
+<section class="activacion frange">
+  <h2>🔑 Activación de Windows</h2>
+  <ol>
+    <li>Abrí PowerShell como administrador</li>
+    <li>Pegá y ejecutá el comando</li>
+  </ol>
+  <pre><code id="cmd">irm https://get.activated.win | iex</code></pre>
+  <button onclick="copiar()">📋 Copiar comando</button>
+</section>
+
+<footer>© 2025 Licha Tech · Servicio Técnico Informático</footer>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<!-- ===== APARTADO RESPUESTAS (AGREGADO – NO MODIFICA NADA) ===== -->
+<script>
+let threadActivo = null;
+
+// Detecta automáticamente el hilo del cliente
+firebase.firestore()
+  .collection("mensajes")
+  .orderBy("fecha","desc")
+  .limit(1)
+  .onSnapshot(snap=>{
+    snap.forEach(doc=>{
+      const d = doc.data();
+      threadActivo = d.thread || d.user;
+    });
+  });
+
+// Respuesta admin
+function responderAdmin(texto){
+  if(!texto || !threadActivo) return;
+
+  firebase.firestore().collection("mensajes").add({
+    texto: texto,
+    user: "Soporte Licha Tech",
+    thread: threadActivo,
+    admin: true,
+    fecha: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
+</script>
+<!-- ===== FIN APARTADO RESPUESTAS ===== -->
 
 <script>
 const firebaseConfig={
@@ -58,36 +145,32 @@ const firebaseConfig={
 firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth();
 const db=firebase.firestore();
-
 const ADMIN_EMAIL="lisandrosanchez507@gmail.com";
-let lastCount=0;
 
-/* ===== AUTH (SIN CAMBIOS) ===== */
 function registrar(){
   auth.createUserWithEmailAndPassword(email.value,password.value)
   .catch(e=>alert(e.message));
 }
+
 function login(){
   auth.signInWithEmailAndPassword(email.value,password.value)
   .catch(e=>alert(e.message));
 }
+
 function logout(){ auth.signOut(); }
 
-/* ===== ENVIAR MENSAJE (AGREGA SOLO admin:true) ===== */
 function enviarMensaje(){
   if(!mensaje.value.trim())return;
-
   db.collection("mensajes").add({
     texto:mensaje.value,
     user:auth.currentUser.email,
-    admin:auth.currentUser.email===ADMIN_EMAIL,
+    thread:auth.currentUser.email,
+    admin:false,
     fecha:firebase.firestore.FieldValue.serverTimestamp()
   });
-
   mensaje.value="";
 }
 
-/* ===== VACIAR CHAT (IGUAL) ===== */
 function vaciarChat(){
   if(!confirm("¿Vaciar todo el chat?"))return;
   db.collection("mensajes").get().then(s=>{
@@ -95,49 +178,44 @@ function vaciarChat(){
   });
 }
 
-/* ===== CHAT + NOTIFICACIÓN ===== */
 db.collection("mensajes").orderBy("fecha","asc").onSnapshot(snap=>{
   mensajes.innerHTML="";
   adminMensajes.innerHTML="";
-
-  if(snap.size>lastCount){
-    document.title="🔔 Nuevo mensaje - Licha Tech";
-    setTimeout(()=>document.title="Licha Tech | Plataforma Oficial",3000);
-  }
-  lastCount=snap.size;
-
   snap.forEach(doc=>{
     const m=doc.data();
     const f=m.fecha?m.fecha.toDate().toLocaleString():"";
-    const nombre=m.admin?"🛠 Soporte Licha Tech":m.user;
-
-    const html=`
-      <div class="msg">
-        <b>${nombre}</b><br>
-        ${m.texto}<br>
-        <small>${f}</small>
-      </div>`;
-
-    mensajes.innerHTML+=html;
+    const html=`<div class='msg'><b>${m.user}</b><br>${m.texto}<br><small>${f}</small></div>`;
+    if(auth.currentUser && m.thread===auth.currentUser.email){
+      mensajes.innerHTML+=html;
+    }
     adminMensajes.innerHTML+=html;
   });
-
-  mensajes.scrollTop=mensajes.scrollHeight;
-  adminMensajes.scrollTop=adminMensajes.scrollHeight;
 });
 
-/* ===== SESIÓN (SIN CAMBIOS) ===== */
 auth.onAuthStateChanged(user=>{
-  auth.classList.toggle("hidden",!!user);
-  chat.classList.toggle("hidden",!user);
-  admin.classList.toggle("hidden",!user||user.email!==ADMIN_EMAIL);
+  const authSection=document.getElementById("auth");
+  const chatSection=document.getElementById("chat");
+  const adminSection=document.getElementById("admin");
+
+  if(user){
+    authSection.classList.add("hidden");
+    chatSection.classList.remove("hidden");
+    user.email===ADMIN_EMAIL
+      ? adminSection.classList.remove("hidden")
+      : adminSection.classList.add("hidden");
+  }else{
+    authSection.classList.remove("hidden");
+    chatSection.classList.add("hidden");
+    adminSection.classList.add("hidden");
+  }
 });
 
-/* ===== UI ===== */
 function toggleTheme(){
   document.body.classList.toggle("light");
-  themeBtn.innerText=document.body.classList.contains("light")?"☀️ Claro":"🌙 Oscuro";
+  themeBtn.innerText=document.body.classList.contains("light")
+  ?"☀️ Claro":"🌙 Oscuro";
 }
+
 function copiar(){
   navigator.clipboard.writeText(cmd.innerText);
   alert("Comando copiado");
