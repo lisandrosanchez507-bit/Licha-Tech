@@ -305,11 +305,27 @@ db.collection("mensajes").orderBy("fecha","asc").onSnapshot(snap=>{
   });
 });
 
-auth.onAuthStateChanged(u=>{
-  auth.classList.toggle("hidden",!!u);
-  chat.classList.toggle("hidden",!u);
-  admin.classList.toggle("hidden",!(u && u.email===ADMIN_EMAIL));
+auth.onAuthStateChanged(user=>{
+  const authSection = document.getElementById("auth");
+  const chatSection = document.getElementById("chat");
+  const adminSection = document.getElementById("admin");
+
+  if(user){
+    authSection.classList.add("hidden");
+    chatSection.classList.remove("hidden");
+
+    if(user.email === ADMIN_EMAIL){
+      adminSection.classList.remove("hidden");
+    } else {
+      adminSection.classList.add("hidden");
+    }
+  } else {
+    authSection.classList.remove("hidden");
+    chatSection.classList.add("hidden");
+    adminSection.classList.add("hidden");
+  }
 });
+
 
 function toggleTheme(){
   document.body.classList.toggle("light");
