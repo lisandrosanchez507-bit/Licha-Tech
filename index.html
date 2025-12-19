@@ -9,91 +9,94 @@
 
 <style>
 :root{
-  --bg-main:#0b0f14;
-  --bg-alt:#101d2b;
-  --panel:#161616;
-  --panel-2:#1e1e1e;
+  --bg:#0b0f14;
+  --panel:#151a21;
+  --panel2:#1d2430;
   --text:#ffffff;
   --muted:#9aa4af;
   --accent:#00b4ff;
   --danger:#ff3b3b;
   --shadow:0 20px 40px rgba(0,0,0,.6);
 }
+
 body.light{
-  --bg-main:#eef3f8;
-  --bg-alt:#dde7f2;
+  --bg:#eef3f8;
   --panel:#ffffff;
-  --panel-2:#f1f1f1;
+  --panel2:#f1f1f1;
   --text:#0b0b0b;
   --muted:#555;
-  --accent:#007acc;
 }
+
 *{box-sizing:border-box}
+
 body{
   margin:0;
   font-family:'Satoshi',sans-serif;
   color:var(--text);
   background:
-    radial-gradient(circle at 15% 20%, rgba(0,180,255,.25), transparent 40%),
-    radial-gradient(circle at 85% 30%, rgba(0,255,180,.15), transparent 45%),
-    linear-gradient(120deg,var(--bg-main),var(--bg-alt),var(--bg-main));
-  background-size:200% 200%;
-  animation:fondo 22s ease infinite;
+    radial-gradient(circle at 20% 20%, rgba(0,180,255,.25), transparent 40%),
+    linear-gradient(120deg,#0b0f14,#101d2b,#0b0f14);
+  animation:fondo 18s ease infinite;
 }
+
 @keyframes fondo{
   0%{background-position:0% 50%}
   50%{background-position:100% 50%}
   100%{background-position:0% 50%}
 }
-.hidden{display:none}
-.fade-in{
-  opacity:0;
-  transform:translateY(20px);
-  animation:fadeIn .8s ease forwards;
-}
-@keyframes fadeIn{to{opacity:1;transform:none}}
 
-.topbar{
-  position:relative;
-  background:rgba(0,0,0,.75);
-  backdrop-filter:blur(16px);
-  border-bottom:2px solid var(--accent);
-}
+.hidden{display:none}
+
 header{
   text-align:center;
-  padding:32px 20px;
+  padding:40px 20px;
+  animation:fadeDown 1s ease;
 }
+
+@keyframes fadeDown{
+  from{opacity:0;transform:translateY(-30px)}
+  to{opacity:1;transform:none}
+}
+
 header h1{
   margin:0;
-  font-size:3.6rem;
-  letter-spacing:6px;
+  font-size:3rem;
   color:var(--accent);
-  text-shadow:0 0 30px rgba(0,180,255,.7);
 }
-header p{color:var(--muted)}
+
+header p{
+  margin-top:10px;
+  color:var(--muted);
+}
+
 .theme-toggle{
-  position:absolute;
+  position:fixed;
   top:20px;
   right:20px;
-  padding:8px 18px;
-  border-radius:20px;
+  background:none;
   border:1px solid var(--accent);
-  background:transparent;
   color:var(--accent);
+  padding:8px 16px;
+  border-radius:20px;
   cursor:pointer;
-  font-weight:600;
 }
 
 section{
   max-width:1000px;
   margin:auto;
-  padding:50px 20px;
+  padding:40px 20px;
+  animation:fadeUp .8s ease;
 }
-h2{color:var(--accent)}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:none}
+}
+
 .panel{
   background:var(--panel);
-  border-radius:18px;
   padding:24px;
+  border-radius:18px;
   box-shadow:var(--shadow);
 }
 
@@ -101,48 +104,55 @@ input,textarea{
   width:100%;
   padding:14px;
   margin-bottom:12px;
-  border-radius:12px;
   border:none;
-  background:var(--panel-2);
+  border-radius:12px;
+  background:var(--panel2);
   color:var(--text);
 }
-textarea{resize:none}
 
 button{
-  padding:14px 26px;
+  padding:14px 24px;
   border:none;
   border-radius:14px;
-  font-weight:600;
   cursor:pointer;
+  font-weight:600;
+  background:linear-gradient(135deg,var(--accent),#0070a8);
   color:#fff;
-  background:linear-gradient(135deg,var(--accent),#006fa8);
 }
-button:hover{transform:scale(1.03)}
-button.danger{
+
+button.red{
   background:linear-gradient(135deg,var(--danger),#b30000);
 }
 
 .chat-box{
-  max-height:420px;
+  max-height:400px;
   overflow:auto;
 }
-.msg{margin-bottom:18px}
-.msg small{color:var(--muted)}
+
+.msg{
+  margin-bottom:15px;
+  padding-bottom:10px;
+  border-bottom:1px solid #333;
+}
+
+.msg small{
+  color:var(--muted);
+}
 
 .youtube{
   background:var(--panel);
   text-align:center;
 }
+
 .youtube a{
   display:inline-block;
   margin-top:15px;
-  padding:14px 30px;
+  padding:12px 30px;
   border-radius:14px;
-  background:#1e1e1e;
-  color:var(--text);
+  background:var(--accent);
+  color:#fff;
   text-decoration:none;
   font-weight:700;
-  border:1px solid var(--accent);
 }
 
 .activacion{
@@ -150,6 +160,7 @@ button.danger{
   border-top:3px solid var(--accent);
   border-bottom:3px solid var(--accent);
 }
+
 .activacion pre{
   background:#111;
   padding:16px;
@@ -159,7 +170,7 @@ button.danger{
 
 footer{
   text-align:center;
-  padding:25px;
+  padding:20px;
   color:var(--muted);
 }
 </style>
@@ -167,18 +178,14 @@ footer{
 
 <body>
 
-<div class="topbar fade-in">
-  <button class="theme-toggle" onclick="toggleTheme()">
-    <span id="themeIcon">🌙</span> <span id="themeText">Oscuro</span>
-  </button>
-  <header>
-    <h1>Licha Tech</h1>
-    <p>Servicio técnico real · Diagnóstico · Reparación</p>
-  </header>
-</div>
+<button class="theme-toggle" onclick="toggleTheme()">🌓 Tema</button>
 
-<section id="auth" class="fade-in">
-  <h2>🔐 Acceso</h2>
+<header>
+  <h1>Licha Tech</h1>
+  <p>Servicio técnico informático · Diagnóstico, reparación y optimización</p>
+</header>
+
+<section id="auth">
   <div class="panel">
     <input id="email" placeholder="Email">
     <input id="password" type="password" placeholder="Contraseña">
@@ -187,33 +194,40 @@ footer{
   </div>
 </section>
 
-<section id="chat" class="hidden fade-in">
-  <h2>💬 Consultas</h2>
+<section id="chat" class="hidden">
+  <h2>Consultas técnicas</h2>
   <div class="panel chat-box" id="mensajes"></div>
   <textarea id="mensaje" rows="3" placeholder="Escribí tu consulta..."></textarea>
   <button onclick="enviarMensaje()">Enviar</button>
-  <button class="danger" onclick="logout()">Cerrar sesión</button>
+  <button onclick="logout()">Cerrar sesión</button>
 </section>
 
-<section id="admin" class="hidden fade-in">
-  <h2> Panel Admin</h2>
+<section id="admin" class="hidden">
+  <h2>Panel administrador</h2>
   <div class="panel" id="adminMensajes"></div>
-  <button class="danger" onclick="vaciarChat()">Vaciar chat</button>
+  <button class="red" onclick="vaciarChat()">Vaciar chat</button>
 </section>
 
-<section class="youtube fade-in">
+<section class="youtube">
   <h2>📺 Canal de YouTube</h2>
-  <p>Reparaciones reales y soluciones.</p>
+  <p>Contenido técnico: reparaciones, diagnósticos y pruebas reales.</p>
   <a href="https://www.youtube.com/@LichaTech" target="_blank">Ir al canal</a>
 </section>
 
-<section class="activacion fade-in">
+<section class="activacion">
   <h2>🔑 Activación de Windows</h2>
+  <ol>
+    <li>Copiá el comando</li>
+    <li>Abrí PowerShell como administrador</li>
+    <li>Pegá y ejecutá</li>
+  </ol>
   <pre><code id="cmd">irm https://get.activated.win | iex</code></pre>
-  <button onclick="copiar()">Copiar comando</button>
+  <button onclick="copiar()">📋 Copiar comando</button>
 </section>
 
-<footer>© 2025 Licha Tech</footer>
+<footer>
+  © 2025 Licha Tech · Servicio Técnico Informático · Todos los derechos reservados
+</footer>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -225,64 +239,62 @@ firebase.initializeApp({
   authDomain:"licha-tech-ec128.firebaseapp.com",
   projectId:"licha-tech-ec128"
 });
+
 const auth=firebase.auth();
 const db=firebase.firestore();
 const ADMIN="lisandrosanchez507@gmail.com";
-
-const authSection=document.getElementById("auth");
-const chatSection=document.getElementById("chat");
-const adminSection=document.getElementById("admin");
 
 function registrar(){
   auth.createUserWithEmailAndPassword(email.value,password.value)
   .catch(e=>alert(e.message));
 }
+
 function login(){
   auth.signInWithEmailAndPassword(email.value,password.value)
   .catch(e=>alert(e.message));
 }
-function logout(){auth.signOut();}
+
+function logout(){
+  auth.signOut();
+}
 
 function enviarMensaje(){
   if(!mensaje.value.trim())return;
   db.collection("mensajes").add({
     texto:mensaje.value,
     user:auth.currentUser.email,
-    fecha:firebase.firestore.FieldValue.serverTimestamp()
+    fecha:new Date()
   });
   mensaje.value="";
 }
 
 function vaciarChat(){
-  if(!confirm("Vaciar todo el chat?"))return;
+  if(!confirm("¿Vaciar todo el chat?"))return;
   db.collection("mensajes").get().then(s=>{
     s.forEach(d=>d.ref.delete());
   });
 }
 
-db.collection("mensajes").orderBy("fecha")
-.onSnapshot(s=>{
+db.collection("mensajes").orderBy("fecha","asc").onSnapshot(s=>{
   mensajes.innerHTML="";
   adminMensajes.innerHTML="";
   s.forEach(d=>{
     const m=d.data();
-    const f=m.fecha?m.fecha.toDate().toLocaleString("es-AR"):"";
+    const f=new Date(m.fecha.seconds*1000).toLocaleString();
     const html=`<div class="msg"><b>${m.user}</b><br>${m.texto}<br><small>${f}</small></div>`;
     mensajes.innerHTML+=html;
     adminMensajes.innerHTML+=html;
   });
 });
 
-auth.onAuthStateChanged(user=>{
-  authSection.classList.toggle("hidden",!!user);
-  chatSection.classList.toggle("hidden",!user);
-  adminSection.classList.toggle("hidden",!(user&&user.email===ADMIN));
+auth.onAuthStateChanged(u=>{
+  document.getElementById("auth").classList.toggle("hidden",!!u);
+  document.getElementById("chat").classList.toggle("hidden",!u);
+  document.getElementById("admin").classList.toggle("hidden",!(u && u.email===ADMIN));
 });
 
 function toggleTheme(){
   document.body.classList.toggle("light");
-  themeIcon.textContent=document.body.classList.contains("light")?"☀️":"🌙";
-  themeText.textContent=document.body.classList.contains("light")?"Claro":"Oscuro";
 }
 
 function copiar(){
@@ -290,5 +302,6 @@ function copiar(){
   alert("Comando copiado");
 }
 </script>
+
 </body>
 </html>
