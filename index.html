@@ -10,28 +10,35 @@
 body{
   margin:0;
   font-family:Arial, sans-serif;
-  background:#0f0f0f;
+  background:#0b0b0b;
   color:#fff;
   overflow-x:hidden;
 }
 
-/* FONDO ANIMADO */
-body::before{
+/* ================= FONDO ANIMADO INTENSO ================= */
+body::before,
+body::after{
   content:"";
   position:fixed;
-  inset:0;
+  inset:-50%;
+  z-index:-2;
   background:
-    radial-gradient(circle at 20% 20%, rgba(0,180,255,0.12), transparent 40%),
-    radial-gradient(circle at 80% 80%, rgba(0,180,255,0.08), transparent 40%),
-    linear-gradient(120deg,#0b0b0b,#121212,#0b0b0b);
-  background-size:200% 200%;
-  animation:fondoMovimiento 20s ease-in-out infinite;
-  z-index:-1;
+    radial-gradient(circle at 20% 20%, rgba(0,180,255,0.45), transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(0,255,200,0.25), transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(0,120,255,0.35), transparent 50%);
+  animation:fondoVivo 18s linear infinite;
+  filter:blur(120px);
 }
-@keyframes fondoMovimiento{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
+
+body::after{
+  animation-duration:30s;
+  opacity:.6;
+}
+
+@keyframes fondoVivo{
+  0%{transform:translate(0,0) rotate(0deg)}
+  50%{transform:translate(10%,5%) rotate(180deg)}
+  100%{transform:translate(0,0) rotate(360deg)}
 }
 
 /* ================= HEADER ================= */
@@ -39,11 +46,13 @@ header{
   background:linear-gradient(135deg,#111,#1f1f1f);
   padding:40px 20px;
   text-align:center;
+  box-shadow:0 0 30px rgba(0,180,255,.15);
 }
 header h1{
   margin:0;
-  font-size:2.5rem;
+  font-size:2.6rem;
   color:#00b4ff;
+  text-shadow:0 0 15px rgba(0,180,255,.6);
 }
 header p{color:#aaa}
 
@@ -52,27 +61,31 @@ section{
   padding:40px 20px;
   max-width:900px;
   margin:auto;
-  animation:fadeUp .8s ease both;
+  animation:fadeUp .7s ease both;
 }
 @keyframes fadeUp{
-  from{opacity:0;transform:translateY(25px)}
+  from{opacity:0;transform:translateY(30px)}
   to{opacity:1;transform:translateY(0)}
 }
-h2{color:#00b4ff}
+h2{
+  color:#00b4ff;
+  text-shadow:0 0 10px rgba(0,180,255,.4);
+}
 
 /* ================= CHAT ================= */
 .chat-box{
-  background:#1c1c1c;
+  background:#151515;
   padding:20px;
-  border-radius:12px;
+  border-radius:14px;
   max-height:400px;
   overflow:auto;
+  box-shadow:0 0 25px rgba(0,0,0,.6);
 }
 .chat-box p{
   animation:mensajeIn .3s ease both;
 }
 @keyframes mensajeIn{
-  from{opacity:0;transform:translateX(-10px)}
+  from{opacity:0;transform:translateX(-15px)}
   to{opacity:1;transform:translateX(0)}
 }
 
@@ -87,48 +100,84 @@ textarea,input{
   padding:12px;
   border-radius:8px;
   border:none;
-  background:#2a2a2a;
+  background:#242424;
   color:#fff;
 }
 
-/* ================= BOTONES ================= */
+/* ================= BOTONES ULTRA ================= */
 button,.btn{
-  background:#00b4ff;
+  background:linear-gradient(135deg,#00b4ff,#0080ff);
   border:none;
-  padding:12px 18px;
-  border-radius:8px;
+  padding:12px 20px;
+  border-radius:10px;
   font-weight:bold;
   cursor:pointer;
   color:#fff;
-  transition:transform .15s,box-shadow .15s,opacity .15s;
+  position:relative;
+  overflow:hidden;
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease,
+    filter .15s ease;
+  box-shadow:0 0 20px rgba(0,180,255,.35);
+  animation:respirar 3s ease-in-out infinite;
 }
+
+@keyframes respirar{
+  0%,100%{box-shadow:0 0 18px rgba(0,180,255,.35)}
+  50%{box-shadow:0 0 28px rgba(0,180,255,.65)}
+}
+
 button:hover,.btn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 6px 18px rgba(0,180,255,.35);
+  transform:translateY(-3px) scale(1.03);
+  box-shadow:0 0 35px rgba(0,180,255,.9);
+  filter:brightness(1.15);
 }
-button:active{transform:scale(.97)}
+
+button:active,.btn:active{
+  transform:scale(.95);
+  box-shadow:0 0 15px rgba(0,180,255,.5);
+}
+
+/* Efecto onda */
+button::after,.btn::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle, rgba(255,255,255,.35), transparent 40%);
+  opacity:0;
+  transition:.4s;
+}
+button:active::after,.btn:active::after{
+  opacity:1;
+}
 
 .hidden{display:none}
 
 /* ================= ADMIN ================= */
 .admin{
   border:2px solid #00b4ff;
-  border-radius:12px;
+  border-radius:14px;
   padding:15px;
   max-height:400px;
   overflow:auto;
+  box-shadow:0 0 25px rgba(0,180,255,.2);
 }
 
 /* ================= YOUTUBE ================= */
 .youtube{
-  background:linear-gradient(135deg,#0a0a0a,#141414);
   text-align:center;
+  background:linear-gradient(135deg,#0c0c0c,#151515);
+  box-shadow:0 0 40px rgba(255,0,0,.15);
 }
-.btn-youtube{background:#ff0000}
+.btn-youtube{
+  background:linear-gradient(135deg,#ff0000,#c40000);
+  box-shadow:0 0 30px rgba(255,0,0,.6);
+}
 
 /* ================= FOOTER ================= */
 footer{
-  background:#111;
+  background:#0f0f0f;
   text-align:center;
   padding:20px;
   color:#777;
@@ -143,122 +192,6 @@ footer{
 <p>Servicio técnico informático · Preguntá y te respondo</p>
 </header>
 
-<section id="authDiv">
-<h2>🔐 Ingresar / Registrarse</h2>
-<div class="chat-box">
-<input id="email" placeholder="Email"><br><br>
-<input id="password" type="password" placeholder="Contraseña"><br><br>
-<button onclick="registrar()">Registrarse</button>
-<button onclick="login()">Entrar</button>
-</div>
-</section>
-
-<section id="chat" class="hidden">
-<h2>💬 Preguntas</h2>
-<button onclick="cerrarSesion()">Cerrar sesión</button>
-<div class="chat-box" id="mensajes"></div>
-<div class="chat-input">
-<textarea id="mensaje" rows="3" placeholder="Escribí tu consulta..."></textarea>
-<button onclick="enviarMensaje()">Enviar</button>
-</div>
-</section>
-
-<section id="admin" class="hidden">
-<h2>🛠 Panel Admin</h2>
-<div class="admin" id="adminMensajes"></div>
-<button onclick="vaciarChat()">Vaciar chat</button>
-</section>
-
-<section class="youtube">
-<h2>📺 Canal de YouTube</h2>
-<p>Reparaciones reales, optimización y soluciones explicadas sin humo.</p>
-<a href="https://www.youtube.com/@LichaTech" target="_blank" class="btn btn-youtube">Ir al canal</a>
-</section>
-
-  <section class="activacion">
-<h2>🔑 Activación de Windows</h2>
-<p>Para activar tu Windows con licencia válida, seguí estos pasos:</p>
-<ol>
-<li>Copiá el siguiente comando.</li>
-<li>Hacé clic derecho en Inicio.</li>
-<li>PowerShell (Administrador).</li>
-<li>Pegá el comando y ejecutalo.</li>
-</ol>
-<pre><code>irm https://get.activated.win | iex</code></pre>
-</section>
-
-<footer>© 2025 Licha Tech · Servicio Técnico Informático</footer>
-
-<!-- FIREBASE -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
-<script>
-const firebaseConfig={
-  apiKey:"AIzaSyDPR40KPSX1BXu6nDOrZ2Muj-oyElZ1IQ8",
-  authDomain:"licha-tech-ec128.firebaseapp.com",
-  projectId:"licha-tech-ec128",
-  storageBucket:"licha-tech-ec128.appspot.com",
-  messagingSenderId:"232472382052",
-  appId:"1:232472382052:web:9fb54fdbfc72f1c310ad71"
-};
-firebase.initializeApp(firebaseConfig);
-
-const auth=firebase.auth();
-const db=firebase.firestore();
-const ADMIN_EMAIL="lisandrosanchez507@gmail.com";
-
-function registrar(){
-  auth.createUserWithEmailAndPassword(email.value,password.value)
-  .catch(e=>alert(e.message));
-}
-function login(){
-  auth.signInWithEmailAndPassword(email.value,password.value)
-  .catch(e=>alert(e.message));
-}
-function enviarMensaje(){
-  const t=mensaje.value.trim();
-  if(!t)return;
-  db.collection("mensajes").add({
-    texto:t,
-    fecha:firebase.firestore.FieldValue.serverTimestamp(),
-    user:auth.currentUser.email,
-    respuesta:""
-  });
-  mensaje.value="";
-}
-function vaciarChat(){
-  db.collection("mensajes").get().then(s=>{
-    const b=db.batch();
-    s.forEach(d=>b.delete(d.ref));
-    b.commit();
-  });
-}
-function cerrarSesion(){auth.signOut();}
-
-auth.onAuthStateChanged(u=>{
-  authDiv.style.display=u?"none":"block";
-  chat.classList.toggle("hidden",!u);
-  admin.classList.toggle("hidden",!(u && u.email===ADMIN_EMAIL));
-});
-
-db.collection("mensajes").orderBy("fecha").onSnapshot(s=>{
-  mensajes.innerHTML="";
-  adminMensajes.innerHTML="";
-  s.forEach(d=>{
-    const m=d.data();
-    mensajes.innerHTML+=`<p><b>${m.user}</b>: ${m.texto}</p>`;
-    if(m.respuesta) mensajes.innerHTML+=`<p style="color:#0f0">Admin: ${m.respuesta}</p>`;
-    if(auth.currentUser && auth.currentUser.email===ADMIN_EMAIL){
-      adminMensajes.innerHTML+=`
-      <p>${m.user}: ${m.texto}</p>
-      <input id="r${d.id}" placeholder="Responder">
-      <button onclick="db.collection('mensajes').doc('${d.id}').update({respuesta:document.getElementById('r${d.id}').value})">Responder</button><hr>`;
-    }
-  });
-});
-</script>
 
 </body>
 </html>
