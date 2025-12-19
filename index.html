@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Licha Tech | Preguntas y Respuestas</title>
 
-<!-- FUENTE SATOSHI -->
 <link href="https://fonts.cdnfonts.com/css/satoshi" rel="stylesheet">
 
 <style>
@@ -15,6 +14,7 @@
   --card:#1c1c1c;
   --text:#ffffff;
   --accent:#00b4ff;
+  --bar:#0a0a0aee;
 }
 
 [data-theme="light"]{
@@ -23,9 +23,10 @@
   --card:#ffffff;
   --text:#111;
   --accent:#007acc;
+  --bar:#ffffffee;
 }
 
-/* BODY CON FONDO ANIMADO */
+/* Fondo animado */
 body{
   margin:0;
   font-family:'Satoshi', Arial, sans-serif;
@@ -36,28 +37,45 @@ body{
     linear-gradient(120deg,var(--bg1),var(--bg2),var(--bg1));
   background-size:200% 200%;
   animation:bgmove 18s ease-in-out infinite;
-  transition:.4s;
 }
-
 @keyframes bgmove{
   0%{background-position:0% 50%}
   50%{background-position:100% 50%}
   100%{background-position:0% 50%}
 }
 
-/* HEADER */
+/* Barra superior */
+.topbar{
+  background:var(--bar);
+  backdrop-filter: blur(12px);
+  padding:20px;
+  position:relative;
+}
+
+/* Toggle tema */
+.theme-toggle{
+  position:absolute;
+  right:20px;
+  top:20px;
+  background:none;
+  border:1px solid var(--accent);
+  color:var(--accent);
+  padding:6px 14px;
+  border-radius:20px;
+  cursor:pointer;
+}
+
+/* Header */
 header{
   text-align:center;
-  padding:50px 20px;
 }
 header h1{
-  font-size:3.5rem;
+  margin:0;
+  font-size:3.2rem;
   letter-spacing:4px;
   text-transform:uppercase;
-  color:#e9faff;
-  text-shadow:
-    0 0 10px rgba(0,180,255,.8),
-    0 0 40px rgba(0,180,255,.4);
+  color:var(--accent);
+  text-shadow:0 0 20px rgba(0,180,255,.6);
   animation:pulse 4s infinite;
 }
 @keyframes pulse{
@@ -65,17 +83,18 @@ header h1{
   50%{opacity:.85}
 }
 header p{
+  margin-top:8px;
   opacity:.8;
 }
 
-/* SECCIONES */
+/* Secciones */
 section{
   max-width:900px;
   margin:auto;
   padding:40px 20px;
 }
 
-/* CAJAS */
+/* Cajas */
 .chat-box,.admin{
   background:var(--card);
   border-radius:14px;
@@ -83,7 +102,7 @@ section{
   box-shadow:0 0 20px rgba(0,0,0,.4);
 }
 
-/* INPUTS */
+/* Inputs */
 input,textarea{
   width:100%;
   background:#2a2a2a;
@@ -94,7 +113,7 @@ input,textarea{
   margin-bottom:10px;
 }
 
-/* BOTONES PRO */
+/* Botones */
 button,.btn{
   background:linear-gradient(135deg,var(--accent),#007acc);
   border:none;
@@ -110,26 +129,24 @@ button:hover,.btn:hover{
   box-shadow:0 8px 20px rgba(0,180,255,.4);
 }
 
-/* CHAT */
-.chat-input{
-  display:flex;
-  gap:10px;
-}
+.chat-input{display:flex;gap:10px}
 .hidden{display:none}
 
-/* TOGGLE TEMA */
-.toggle{
-  position:fixed;
-  top:15px;
-  right:15px;
+/* Activación */
+.activacion{
+  background:#000;
+  color:#fff;
+  border-top:3px solid var(--accent);
+  border-bottom:3px solid var(--accent);
+}
+.activacion pre{
+  background:#111;
+  padding:15px;
+  border-radius:10px;
+  overflow:auto;
 }
 
-/* YOUTUBE */
-.youtube{
-  text-align:center;
-}
-
-/* FOOTER */
+/* Footer */
 footer{
   text-align:center;
   padding:20px;
@@ -140,12 +157,13 @@ footer{
 
 <body>
 
-<button class="toggle" onclick="toggleTheme()">🌗</button>
-
-<header>
-<h1>Licha Tech</h1>
-<p>Servicio técnico real · Preguntá y te respondo</p>
-</header>
+<div class="topbar">
+  <button class="theme-toggle" onclick="toggleTheme()">Claro / Oscuro</button>
+  <header>
+    <h1>Licha Tech</h1>
+    <p>Servicio técnico real · Preguntá y te respondo</p>
+  </header>
+</div>
 
 <section id="authDiv">
 <h2>🔐 Ingresar / Registrarse</h2>
@@ -171,11 +189,6 @@ footer{
 <div class="admin" id="adminMensajes"></div>
 </section>
 
-<section class="youtube">
-<h2>📺 Canal de YouTube</h2>
-<a href="https://www.youtube.com/@LichaTech" target="_blank" class="btn">Ir al canal</a>
-</section>
-
 <section class="activacion">
 <h2>🔑 Activación de Windows</h2>
 <ol>
@@ -184,13 +197,11 @@ footer{
 <li>PowerShell (Administrador)</li>
 <li>Pegá y ejecutá</li>
 </ol>
-<pre><code>irm https://get.activated.win | iex</code></pre>
+<pre><code id="cmd">irm https://get.activated.win | iex</code></pre>
+<button onclick="copiar()">📋 Copiar comando</button>
 </section>
 
 <footer>© 2025 Licha Tech</footer>
-
-<!-- SONIDO TIC -->
-<audio id="tic" src="https://cdn.pixabay.com/audio/2022/03/15/audio_2c2b7d8f63.mp3"></audio>
 
 <!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -211,30 +222,24 @@ const auth=firebase.auth();
 const db=firebase.firestore();
 const ADMIN_EMAIL="lisandrosanchez507@gmail.com";
 
-const tic=document.getElementById("tic");
-document.addEventListener("click",()=>{tic.currentTime=0;tic.play()});
-document.addEventListener("keydown",()=>{tic.currentTime=0;tic.play()});
-
 function registrar(){auth.createUserWithEmailAndPassword(email.value,password.value)}
 function login(){auth.signInWithEmailAndPassword(email.value,password.value)}
 
 function enviarMensaje(){
-  const t=mensaje.value.trim();
-  if(!t)return;
+  if(!mensaje.value.trim())return;
   db.collection("mensajes").add({
-    texto:t,
+    texto:mensaje.value,
     fecha:new Date(),
     user:auth.currentUser.email
   });
   mensaje.value="";
 }
 
-db.collection("mensajes").orderBy("fecha","asc").onSnapshot(s=>{
+db.collection("mensajes").orderBy("fecha").onSnapshot(s=>{
   mensajes.innerHTML="";
   s.forEach(d=>{
     const m=d.data();
-    const f=new Date(m.fecha).toLocaleString();
-    mensajes.innerHTML+=`<p><b>${m.user}</b> [${f}]<br>${m.texto}</p><hr>`;
+    mensajes.innerHTML+=`<p><b>${m.user}</b> [${new Date(m.fecha).toLocaleString()}]<br>${m.texto}</p><hr>`;
   });
 });
 
@@ -247,6 +252,11 @@ auth.onAuthStateChanged(u=>{
 function toggleTheme(){
   document.documentElement.dataset.theme =
     document.documentElement.dataset.theme==="dark"?"light":"dark";
+}
+
+function copiar(){
+  navigator.clipboard.writeText(document.getElementById("cmd").innerText);
+  alert("Comando copiado ✔");
 }
 </script>
 
