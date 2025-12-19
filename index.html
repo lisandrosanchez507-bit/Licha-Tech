@@ -44,53 +44,50 @@ body{
   background-color: var(--bg-main);
   min-height: 100vh;
   overflow-x: hidden;
-  /* Fondo base */
   background-image: linear-gradient(to bottom, var(--bg-main), var(--bg-alt));
 }
 
-/* ===== EFECTO NEBULOSA (ANIMACIÓN DETRÁS) ===== */
+/* EFECTO NEBULOSA MEJORADO PARA MÓVIL (Uso de vh/vw fijos) */
 .nebula-container {
   position: fixed;
   top: 0; left: 0;
-  width: 100%; height: 100%;
+  width: 100vw; height: 100vh;
   z-index: -2;
   overflow: hidden;
-  background: var(--bg-main);
 }
 
 .nebula {
   position: absolute;
-  filter: blur(80px);
-  opacity: 0.4;
+  filter: blur(60px);
+  opacity: 0.5;
   border-radius: 50%;
-  animation: float NebulaAnim 20s infinite alternate;
+  pointer-events: none;
 }
 
 .n1 { 
-  width: 80vw; height: 80vh; 
+  width: 150vw; height: 150vw; 
   background: radial-gradient(circle, rgba(0, 180, 255, 0.3), transparent);
-  top: -10%; left: -10%;
-  animation: move1 25s infinite alternate;
+  top: -50vw; left: -50vw;
+  animation: move1 20s infinite alternate linear;
 }
 
 .n2 { 
-  width: 70vw; height: 70vh; 
+  width: 130vw; height: 130vw; 
   background: radial-gradient(circle, rgba(0, 255, 180, 0.2), transparent);
-  bottom: -10%; right: -10%;
-  animation: move2 30s infinite alternate-reverse;
+  bottom: -40vw; right: -40vw;
+  animation: move2 25s infinite alternate linear;
 }
 
 @keyframes move1 {
-  0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(20%, 15%) scale(1.2); }
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(30%, 20%); }
 }
 
 @keyframes move2 {
-  0% { transform: translate(0, 0) scale(1.1); }
-  100% { transform: translate(-25%, -10%) scale(0.9); }
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-30%, -20%); }
 }
 
-/* MALLA TECNOLÓGICA (SOBRE LA NEBULOSA) */
 body::before {
   content: "";
   position: fixed;
@@ -99,7 +96,7 @@ body::before {
   background-image: 
     linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 40px 40px;
+  background-size: 30px 30px;
   z-index: -1;
   pointer-events: none;
 }
@@ -116,12 +113,22 @@ body::before {
 
 header{ text-align:center; padding:28px 20px 34px; }
 
+/* TÍTULO AJUSTADO PARA CELULAR */
 .title-anim{
   margin:0;
-  font-size:clamp(2.2rem, 8vw, 3.5rem);
-  letter-spacing:6px;
+  font-size: 3.2rem;
+  line-height: 1.1;
+  letter-spacing:4px;
   color:var(--accent);
   text-shadow: 0 0 15px rgba(0, 180, 255, 0.5);
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .title-anim {
+    font-size: 2.5rem;
+    white-space: pre-line; /* Permite el salto de línea manual */
+  }
 }
 
 section{
@@ -157,7 +164,6 @@ button{
 button:hover{ transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 180, 255, 0.4); }
 
 .chat-box{ max-height:420px; overflow:auto; }
-
 .msg{ margin-bottom:18px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
 
 .youtube a{
@@ -169,7 +175,7 @@ button:hover{ transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 180, 2
 .activacion pre{
   background:#000; padding:16px; border-radius:12px;
   overflow-x: auto; border: 1px solid var(--accent);
-  color: #00ff00; /* Color verde código */
+  color: #00ff00;
 }
 
 footer{ text-align:center; padding:40px 25px; color:var(--muted); }
@@ -184,10 +190,11 @@ footer{ text-align:center; padding:40px 25px; color:var(--muted); }
 </div>
 
 <div class="topbar">
-  <button class="theme-btn" id="themeBtn" style="position:absolute; top:20px; right:20px;" onclick="toggleTheme()">🌙 Oscuro</button>
+  <button class="theme-btn" id="themeBtn" style="position:absolute; top:10px; right:10px;" onclick="toggleTheme()">🌙</button>
   <header>
-    <h1 class="title-anim">Licha Tech</h1>
-    <p>Reparación de PC y notebooks · Diagnóstico de hardware y software.</p>
+    <h1 class="title-anim" id="mainTitle">Licha
+Tech</h1>
+    <p>Reparación de PC y notebooks.</p>
   </header>
 </div>
 
@@ -228,8 +235,7 @@ footer{ text-align:center; padding:40px 25px; color:var(--muted); }
 <section class="activacion frange">
   <h2>🔑 Activación de Windows</h2>
   <ol>
-    <li>Copia el comando y hace clic izquierdo en el icono de windows</li>
-    <li>Abrí PowerShell como administrador</li>
+    <li>Copia el comando y abre PowerShell como administrador</li>
     <li>Pegá y ejecutá el comando</li>
   </ol>
   <pre><code id="cmd">irm https://get.activated.win | iex</code></pre>
@@ -243,7 +249,6 @@ footer{ text-align:center; padding:40px 25px; color:var(--muted); }
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
-// CONFIGURACIÓN FIREBASE (Mantenida exactamente igual)
 const firebaseConfig={
   apiKey:"AIzaSyDPR40KPSX1BXu6nDOrZ2Muj-oyElZ1IQ8",
   authDomain:"licha-tech-ec128.firebaseapp.com",
@@ -328,7 +333,7 @@ auth.onAuthStateChanged(user=>{
 
 function toggleTheme(){
   document.body.classList.toggle("light");
-  themeBtn.innerText = document.body.classList.contains("light") ? "☀️ Claro" : "🌙 Oscuro";
+  themeBtn.innerText = document.body.classList.contains("light") ? "☀️" : "🌙";
 }
 function copiar(){
   navigator.clipboard.writeText(cmd.innerText);
