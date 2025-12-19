@@ -5,109 +5,138 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Licha Tech | Preguntas y Respuestas</title>
 
+<!-- FUENTE SATOSHI -->
+<link href="https://fonts.cdnfonts.com/css/satoshi" rel="stylesheet">
+
 <style>
 body{
   margin:0;
-  font-family:Arial, sans-serif;
+  font-family:'Satoshi', Arial, sans-serif;
   background:#0f0f0f;
   color:#fff;
 }
 
+/* HEADER */
 header{
-  background:linear-gradient(135deg,#111,#1f1f1f);
-  padding:40px 20px;
+  background:#0b0b0b;
+  padding:55px 20px;
   text-align:center;
+  border-bottom:1px solid #1f1f1f;
 }
 header h1{
   margin:0;
-  font-size:2.5rem;
-  color:#00b4ff;
+  font-size:3.4rem;
+  font-weight:700;
+  letter-spacing:5px;
 }
 header p{
-  margin-top:10px;
-  color:#aaa;
+  margin-top:12px;
+  font-size:.9rem;
+  letter-spacing:3px;
+  color:#9adfff;
+  text-transform:uppercase;
 }
 
+/* SECCIONES */
 section{
-  padding:40px 20px;
   max-width:900px;
   margin:auto;
+  padding:40px 20px;
 }
-
 h2{
   color:#00b4ff;
-  margin-bottom:15px;
+  font-weight:600;
+  margin-bottom:18px;
 }
 
+/* CHAT */
 .chat-box{
-  background:#1c1c1c;
+  background:#161616;
+  border:1px solid #2a2a2a;
+  border-radius:14px;
   padding:20px;
-  border-radius:12px;
-  margin-bottom:15px;
   max-height:400px;
   overflow:auto;
+  margin-bottom:12px;
 }
-
 .chat-input{
   display:flex;
   gap:10px;
 }
 
-textarea,input{
+/* INPUTS */
+input,textarea{
   width:100%;
-  padding:12px;
-  border-radius:8px;
-  border:none;
-  background:#2a2a2a;
+  padding:14px;
+  border-radius:10px;
+  border:1px solid #2f2f2f;
+  background:#101010;
   color:#fff;
+  font-size:.95rem;
+}
+input:focus,textarea:focus{
+  outline:none;
+  border-color:#00b4ff;
 }
 
+/* BOTONES */
 button{
-  background:#00b4ff;
-  border:none;
-  padding:12px 18px;
-  border-radius:8px;
-  font-weight:bold;
-  cursor:pointer;
+  background:#1b1b1b;
+  border:1px solid #2e2e2e;
+  padding:14px 22px;
+  border-radius:10px;
   color:#fff;
+  font-weight:600;
+  cursor:pointer;
+  transition:.2s;
+}
+button:hover{
+  border-color:#00b4ff;
+  background:#202020;
+}
+button:active{
+  transform:scale(.96);
 }
 
 .hidden{display:none}
 
-/* Admin */
+/* ADMIN */
 .admin{
-  border:2px solid #00b4ff;
-  border-radius:12px;
+  border:2px dashed #00b4ff;
+  border-radius:14px;
   padding:15px;
-  margin-top:20px;
   max-height:400px;
   overflow:auto;
 }
 
-/* Youtube */
+/* YOUTUBE */
 .youtube{
   text-align:center;
+  border-top:1px solid #1f1f1f;
 }
-
-.btn{
-  display:inline-block;
-  margin-top:15px;
-  padding:12px 25px;
-  border-radius:8px;
-  font-weight:bold;
-  text-decoration:none;
-  color:#fff;
-}
-
 .btn-youtube{
   background:#ff0000;
+  border:none;
+}
+.btn-youtube:hover{
+  background:#d90000;
 }
 
+/* ACTIVACION (NO TOCAR) */
+.activacion pre{
+  background:#101010;
+  padding:15px;
+  border-radius:10px;
+  overflow:auto;
+}
+
+/* FOOTER */
 footer{
-  background:#111;
+  border-top:1px solid #1f1f1f;
   text-align:center;
   padding:20px;
   color:#777;
+  font-size:.9rem;
 }
 </style>
 </head>
@@ -115,58 +144,58 @@ footer{
 <body>
 
 <header>
-<h1>Licha Tech</h1>
-<p>Servicio técnico en Informática. Hacé tu pregunta y te respondo personalmente.</p>
+  <h1>Licha Tech</h1>
+  <p>Servicio Técnico Informático</p>
 </header>
 
 <section id="authDiv">
-<h2>🔐 Ingresar / Registrarse</h2>
-<div class="chat-box">
-<input id="email" placeholder="Email"><br><br>
-<input id="password" type="password" placeholder="Contraseña"><br><br>
-<button onclick="registrar()">Registrarse</button>
-<button onclick="login()">Entrar</button>
-</div>
+  <h2>🔐 Ingresar / Registrarse</h2>
+  <div class="chat-box">
+    <input id="email" placeholder="Email"><br><br>
+    <input id="password" type="password" placeholder="Contraseña"><br><br>
+    <button onclick="registrar()">Registrarse</button>
+    <button onclick="login()">Entrar</button>
+  </div>
 </section>
 
 <section id="chat" class="hidden">
-<h2>💬 Preguntas</h2>
-<button onclick="cerrarSesion()">Cerrar sesión</button>
-<div class="chat-box" id="mensajes"></div>
-<div class="chat-input">
-<textarea id="mensaje" rows="3" placeholder="Escribí tu consulta..."></textarea>
-<button onclick="enviarMensaje()">Enviar</button>
-</div>
+  <h2>💬 Preguntas</h2>
+  <button onclick="cerrarSesion()">Cerrar sesión</button>
+  <div class="chat-box" id="mensajes"></div>
+  <div class="chat-input">
+    <textarea id="mensaje" rows="3" placeholder="Escribí tu consulta..."></textarea>
+    <button onclick="enviarMensaje()">Enviar</button>
+  </div>
 </section>
 
 <section id="admin" class="hidden">
-<h2>🛠 Panel Admin</h2>
-<div class="admin" id="adminMensajes"></div>
-<button onclick="vaciarChat()">Vaciar chat</button>
+  <h2>🛠 Panel Admin</h2>
+  <div class="admin" id="adminMensajes"></div>
+  <button onclick="vaciarChat()">Vaciar chat</button>
 </section>
 
 <section class="youtube">
-<h2>📺 Canal de YouTube</h2>
-<p>Reparaciones reales, optimización y soluciones explicadas.</p>
-<a href="https://www.youtube.com/@LichaTech" target="_blank" class="btn btn-youtube">
-Ir al canal
-</a>
+  <h2>📺 Canal de YouTube</h2>
+  <p>Reparaciones reales, optimización y soluciones explicadas.</p>
+  <a href="https://www.youtube.com/@LichaTech" target="_blank">
+    <button class="btn-youtube">Ir al canal</button>
+  </a>
 </section>
 
 <section class="activacion">
-<h2>🔑 Activación de Windows</h2>
-<ol>
-<li>Copiá el siguiente comando</li>
-<li>Clic derecho en Inicio</li>
-<li>PowerShell (Administrador)</li>
-<li>Pegá y ejecutá</li>
-</ol>
-<pre><code>irm https://get.activated.win | iex</code></pre>
-<p>Este enlace corresponde a un acceso promocional.</p>
+  <h2>🔑 Activación de Windows</h2>
+  <ol>
+    <li>Copiá el siguiente comando</li>
+    <li>Clic derecho en Inicio</li>
+    <li>PowerShell (Administrador)</li>
+    <li>Pegá y ejecutá</li>
+  </ol>
+  <pre><code>irm https://get.activated.win | iex</code></pre>
+  <p>Este enlace corresponde a un acceso promocional.</p>
 </section>
 
 <footer>
-© 2025 Licha Tech · Servicio Técnico Informático
+  © 2025 Licha Tech · Servicio Técnico Informático
 </footer>
 
 <!-- FIREBASE -->
@@ -193,32 +222,32 @@ function registrar(){
   auth.createUserWithEmailAndPassword(email.value,password.value)
     .catch(e=>alert(e.message));
 }
-
 function login(){
   auth.signInWithEmailAndPassword(email.value,password.value)
     .catch(e=>alert(e.message));
 }
-
 function enviarMensaje(){
   if(!mensaje.value.trim())return;
   db.collection("mensajes").add({
     texto:mensaje.value,
-    fecha:new Date(),
+    fecha:firebase.firestore.FieldValue.serverTimestamp(),
     user:auth.currentUser.email,
     respuesta:""
   });
   mensaje.value="";
 }
 
-db.collection("mensajes").onSnapshot(snap=>{
+db.collection("mensajes").orderBy("fecha","asc").onSnapshot(snap=>{
   mensajes.innerHTML="";
   adminMensajes.innerHTML="";
   snap.forEach(doc=>{
     const d=doc.data();
-    mensajes.innerHTML+=`<p><b>${d.user}</b>: ${d.texto}</p>`;
-    if(auth.currentUser.email===ADMIN_EMAIL){
+    const f=d.fecha?.toDate();
+    const hora=f?f.toLocaleDateString()+" "+f.toLocaleTimeString():"";
+    mensajes.innerHTML+=`<p><b>${d.user}</b> <span style="color:#777">(${hora})</span><br>${d.texto}</p>`;
+    if(auth.currentUser?.email===ADMIN_EMAIL){
       adminMensajes.innerHTML+=`
-        <p><b>${d.user}</b>: ${d.texto}</p>
+        <p><b>${d.user}</b> (${hora})<br>${d.texto}</p>
         <input id="r${doc.id}" placeholder="Responder">
         <button onclick="responder('${doc.id}')">Enviar</button><hr>`;
     }
@@ -229,13 +258,10 @@ function responder(id){
   const r=document.getElementById("r"+id).value;
   db.collection("mensajes").doc(id).update({respuesta:r});
 }
-
 function vaciarChat(){
-  db.collection("mensajes").get().then(s=>{
-    s.forEach(d=>d.ref.delete());
-  });
+  if(!confirm("¿Borrar todo el chat?"))return;
+  db.collection("mensajes").get().then(s=>s.forEach(d=>d.ref.delete()));
 }
-
 function cerrarSesion(){
   auth.signOut();
 }
