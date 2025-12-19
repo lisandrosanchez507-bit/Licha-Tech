@@ -20,7 +20,6 @@
   --shadow:0 20px 40px rgba(0,0,0,.6);
 }
 
-/* ===== MODO CLARO (CORRECCIÓN) ===== */
 body.light{
   --bg-main:#eef3f8;
   --bg-alt:#dde7f2;
@@ -71,15 +70,6 @@ header{
   letter-spacing:6px;
   color:var(--accent);
   animation:glow 2.8s ease-in-out infinite alternate;
-}
-
-@keyframes glow{
-  from{ text-shadow:0 0 10px rgba(0,180,255,.4); }
-  to{
-    text-shadow:
-      0 0 25px rgba(0,180,255,.8),
-      0 0 45px rgba(0,180,255,.4);
-  }
 }
 
 header p{
@@ -160,27 +150,6 @@ button.danger{
   gap:10px;
 }
 
-.youtube{
-  text-align:center;
-}
-
-.youtube a{
-  display:inline-block;
-  margin-top:15px;
-  padding:14px 30px;
-  border-radius:14px;
-  background:#ff0000;
-  color:#fff;
-  font-weight:700;
-  text-decoration:none;
-}
-
-.activacion pre{
-  background:#111;
-  padding:16px;
-  border-radius:12px;
-}
-
 footer{
   text-align:center;
   padding:25px;
@@ -191,7 +160,7 @@ footer{
 
 <body>
 
-<div class="topbar">
+<div class="topbar" id="topbar">
   <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌙 Oscuro</button>
   <header>
     <h1 class="title-anim">Licha Tech</h1>
@@ -227,22 +196,6 @@ footer{
   <button class="danger" onclick="vaciarChat()">Vaciar chat</button>
 </section>
 
-<section class="youtube frange">
-  <h2>📺 Canal de YouTube</h2>
-  <p>Contenido técnico y reparaciones reales.</p>
-  <a href="https://www.youtube.com/@LichaTech" target="_blank">Ir al canal</a>
-</section>
-
-<section class="activacion frange">
-  <h2>🔑 Activación de Windows</h2>
-  <ol>
-    <li>Abrí PowerShell como administrador</li>
-    <li>Pegá y ejecutá el comando</li>
-  </ol>
-  <pre><code id="cmd">irm https://get.activated.win | iex</code></pre>
-  <button onclick="copiar()">📋 Copiar comando</button>
-</section>
-
 <footer>© 2025 Licha Tech · Servicio Técnico Informático</footer>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -264,6 +217,13 @@ const auth=firebase.auth();
 const db=firebase.firestore();
 const ADMIN_EMAIL="lisandrosanchez507@gmail.com";
 
+/* 🔔 NOTIFICACIÓN INYECTADA */
+const notif = document.createElement("div");
+notif.innerText = "🔔 Tenés una respuesta del soporte";
+notif.style.cssText =
+  "background:#00b4ff;color:#000;padding:10px;text-align:center;font-weight:700;display:none";
+document.getElementById("topbar").prepend(notif);
+
 function registrar(){
   auth.createUserWithEmailAndPassword(email.value,password.value)
   .catch(e=>alert(e.message));
@@ -281,6 +241,7 @@ function enviarMensaje(){
   db.collection("mensajes").add({
     texto:mensaje.value,
     user:auth.currentUser.email,
+    admin:auth.currentUser.email===ADMIN_EMAIL,
     fecha:firebase.firestore.FieldValue.serverTimestamp()
   });
   mensaje.value="";
@@ -299,45 +260,28 @@ db.collection("mensajes").orderBy("fecha","asc").onSnapshot(snap=>{
   snap.forEach(doc=>{
     const m=doc.data();
     const f=m.fecha?m.fecha.toDate().toLocaleString():"";
-    const html=`<div class='msg'><b>${m.user}</b><br>${m.texto}<br><small>${f}</small></div>`;
+    const html=`<div class='msg'>
+      <b>${m.admin?"🛠 Soporte Licha Tech":m.user}</b><br>
+      ${m.texto}<br><small>${f}</small></div>`;
     mensajes.innerHTML+=html;
     adminMensajes.innerHTML+=html;
+
+    if(m.admin && auth.currentUser?.email!==ADMIN_EMAIL){
+      notif.style.display="block";
+    }
   });
 });
 
 auth.onAuthStateChanged(user=>{
-  const authSection = document.getElementById("auth");
-  const chatSection = document.getElementById("chat");
-  const adminSection = document.getElementById("admin");
-
-  if(user){
-    authSection.classList.add("hidden");
-    chatSection.classList.remove("hidden");
-
-    if(user.email === ADMIN_EMAIL){
-      adminSection.classList.remove("hidden");
-    } else {
-      adminSection.classList.add("hidden");
-    }
-  } else {
-    authSection.classList.remove("hidden");
-    chatSection.classList.add("hidden");
-    adminSection.classList.add("hidden");
-  }
+  authSection.classList.toggle("hidden",!!user);
+  chat.classList.toggle("hidden",!user);
+  admin.classList.toggle("hidden",user?.email!==ADMIN_EMAIL);
 });
-
 
 function toggleTheme(){
   document.body.classList.toggle("light");
   themeBtn.innerText =
-    document.body.classList.contains("light")
-    ? "☀️ Claro"
-    : "🌙 Oscuro";
-}
-
-function copiar(){
-  navigator.clipboard.writeText(cmd.innerText);
-  alert("Comando copiado");
+    document.body.classList.contains("light")?"☀️ Claro":"🌙 Oscuro";
 }
 </script>
 
