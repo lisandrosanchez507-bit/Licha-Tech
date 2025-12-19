@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Licha Tech | Plataforma Oficial</title>
 
-<!-- FUENTE -->
 <link href="https://fonts.cdnfonts.com/css/satoshi" rel="stylesheet">
 
 <style>
@@ -50,14 +49,12 @@ body{
 .fade-in{
   opacity:0;
   transform:translateY(20px);
-  animation:fadeIn .9s ease forwards;
+  animation:fadeIn .8s ease forwards;
 }
-@keyframes fadeIn{
-  to{opacity:1;transform:none}
-}
+@keyframes fadeIn{to{opacity:1;transform:none}}
 
-/* HEADER */
 .topbar{
+  position:relative;
   background:rgba(0,0,0,.75);
   backdrop-filter:blur(16px);
   border-bottom:2px solid var(--accent);
@@ -87,7 +84,6 @@ header p{color:var(--muted)}
   font-weight:600;
 }
 
-/* SECCIONES */
 section{
   max-width:1000px;
   margin:auto;
@@ -101,7 +97,6 @@ h2{color:var(--accent)}
   box-shadow:var(--shadow);
 }
 
-/* INPUTS */
 input,textarea{
   width:100%;
   padding:14px;
@@ -113,7 +108,6 @@ input,textarea{
 }
 textarea{resize:none}
 
-/* BOTONES */
 button{
   padding:14px 26px;
   border:none;
@@ -128,7 +122,6 @@ button.danger{
   background:linear-gradient(135deg,var(--danger),#b30000);
 }
 
-/* CHAT */
 .chat-box{
   max-height:420px;
   overflow:auto;
@@ -136,7 +129,6 @@ button.danger{
 .msg{margin-bottom:18px}
 .msg small{color:var(--muted)}
 
-/* YOUTUBE */
 .youtube{
   background:var(--panel);
   text-align:center;
@@ -146,13 +138,13 @@ button.danger{
   margin-top:15px;
   padding:14px 30px;
   border-radius:14px;
-  background:var(--accent);
-  color:#fff;
+  background:#1e1e1e;
+  color:var(--text);
   text-decoration:none;
   font-weight:700;
+  border:1px solid var(--accent);
 }
 
-/* ACTIVACION */
 .activacion{
   background:#000;
   border-top:3px solid var(--accent);
@@ -165,7 +157,6 @@ button.danger{
   overflow:auto;
 }
 
-/* FOOTER */
 footer{
   text-align:center;
   padding:25px;
@@ -224,7 +215,6 @@ footer{
 
 <footer>© 2025 Licha Tech</footer>
 
-<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -239,6 +229,10 @@ const auth=firebase.auth();
 const db=firebase.firestore();
 const ADMIN="lisandrosanchez507@gmail.com";
 
+const authSection=document.getElementById("auth");
+const chatSection=document.getElementById("chat");
+const adminSection=document.getElementById("admin");
+
 function registrar(){
   auth.createUserWithEmailAndPassword(email.value,password.value)
   .catch(e=>alert(e.message));
@@ -248,6 +242,7 @@ function login(){
   .catch(e=>alert(e.message));
 }
 function logout(){auth.signOut();}
+
 function enviarMensaje(){
   if(!mensaje.value.trim())return;
   db.collection("mensajes").add({
@@ -257,12 +252,14 @@ function enviarMensaje(){
   });
   mensaje.value="";
 }
+
 function vaciarChat(){
   if(!confirm("Vaciar todo el chat?"))return;
   db.collection("mensajes").get().then(s=>{
     s.forEach(d=>d.ref.delete());
   });
 }
+
 db.collection("mensajes").orderBy("fecha")
 .onSnapshot(s=>{
   mensajes.innerHTML="";
@@ -275,19 +272,22 @@ db.collection("mensajes").orderBy("fecha")
     adminMensajes.innerHTML+=html;
   });
 });
-auth.onAuthStateChanged(u=>{
-  auth.classList.toggle("hidden",!!u);
-  chat.classList.toggle("hidden",!u);
-  admin.classList.toggle("hidden",!(u&&u.email===ADMIN));
+
+auth.onAuthStateChanged(user=>{
+  authSection.classList.toggle("hidden",!!user);
+  chatSection.classList.toggle("hidden",!user);
+  adminSection.classList.toggle("hidden",!(user&&user.email===ADMIN));
 });
+
 function toggleTheme(){
   document.body.classList.toggle("light");
   themeIcon.textContent=document.body.classList.contains("light")?"☀️":"🌙";
   themeText.textContent=document.body.classList.contains("light")?"Claro":"Oscuro";
 }
+
 function copiar(){
   navigator.clipboard.writeText(cmd.innerText);
-  alert("Copiado");
+  alert("Comando copiado");
 }
 </script>
 </body>
