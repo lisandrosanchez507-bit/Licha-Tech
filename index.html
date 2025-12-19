@@ -20,7 +20,6 @@
   --shadow:0 20px 40px rgba(0,0,0,.6);
 }
 
-/* ===== MODO CLARO ===== */
 body.light{
   --bg-main:#eef3f8;
   --bg-alt:#dde7f2;
@@ -33,37 +32,44 @@ body.light{
 
 *{box-sizing:border-box}
 
+/* ANIMACIÓN DE ENTRADA PARA TODA LA WEB */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 body{
   margin:0;
   font-family:'Satoshi',sans-serif;
   color:var(--text);
   background-color: var(--bg-main);
-  /* FONDO ANIMADO MEJORADO */
+  /* FONDO ADAPTATIVO PC/TV/MOVIL */
   background-image: 
-    radial-gradient(at 0% 0%, rgba(0, 180, 255, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(0, 255, 180, 0.1) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(0, 180, 255, 0.15) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(0, 255, 180, 0.1) 0px, transparent 50%),
-    linear-gradient(125deg, var(--bg-main) 0%, var(--bg-alt) 50%, var(--bg-main) 100%);
-  background-size: 200% 200%;
-  animation: fondoAnimado 15s ease infinite;
+    radial-gradient(circle at 20% 20%, rgba(0, 180, 255, 0.2), transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(0, 255, 180, 0.15), transparent 40%),
+    linear-gradient(135deg, var(--bg-main), var(--bg-alt), var(--bg-main));
+  background-attachment: fixed; /* Mantiene el fondo quieto al scrollear */
+  background-size: 400% 400%;
+  animation: fondoMovimiento 12s ease infinite, fadeInUp 1.2s ease-out;
   min-height: 100vh;
 }
 
-@keyframes fondoAnimado{
-  0%{background-position:0% 0%}
-  50%{background-position:100% 100%}
-  100%{background-position:0% 0%}
+@keyframes fondoMovimiento {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-/* Efecto de malla tecnológica */
+/* MALLA TECNOLÓGICA MEJORADA */
 body::before {
   content: "";
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 30px 30px;
   z-index: -1;
   pointer-events: none;
 }
@@ -72,9 +78,10 @@ body::before {
 
 .topbar{
   position:relative;
-  background:rgba(0,0,0,.75);
-  backdrop-filter:blur(16px);
+  background:rgba(0,0,0,.8);
+  backdrop-filter:blur(20px);
   border-bottom:2px solid var(--accent);
+  z-index: 10;
 }
 
 header{
@@ -84,7 +91,7 @@ header{
 
 .title-anim{
   margin:0;
-  font-size:3.2rem;
+  font-size:clamp(2rem, 8vw, 3.2rem); /* Tamaño fluido para TV y Celular */
   letter-spacing:6px;
   color:var(--accent);
   animation:glow 2.8s ease-in-out infinite alternate;
@@ -92,36 +99,19 @@ header{
 
 @keyframes glow{
   from{ text-shadow:0 0 10px rgba(0,180,255,.4); }
-  to{
-    text-shadow:
-      0 0 25px rgba(0,180,255,.8),
-      0 0 45px rgba(0,180,255,.4);
-  }
-}
-
-header p{
-  margin-top:8px;
-  color:var(--muted);
-}
-
-.theme-btn{
-  position:absolute;
-  top:20px;
-  right:20px;
-  padding:8px 18px;
-  border-radius:20px;
-  border:1px solid var(--accent);
-  background:transparent;
-  color:var(--accent);
-  cursor:pointer;
-  font-weight:600;
+  to{ text-shadow: 0 0 25px rgba(0,180,255,.8), 0 0 45px rgba(0,180,255,.4); }
 }
 
 section{
   max-width:1000px;
   margin:auto;
-  padding:50px 20px;
+  padding:40px 20px;
+  animation: fadeInUp 1s ease-out both;
 }
+
+/* Delay para que las secciones aparezcan una tras otra */
+section:nth-child(2) { animation-delay: 0.2s; }
+section:nth-child(3) { animation-delay: 0.4s; }
 
 .frange::before{
   content:"";
@@ -131,13 +121,12 @@ section{
   background:linear-gradient(90deg,transparent,var(--accent),transparent);
 }
 
-h2{color:var(--accent)}
-
 .panel{
   background:var(--panel);
   border-radius:18px;
   padding:24px;
   box-shadow:var(--shadow);
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
 input,textarea{
@@ -148,6 +137,7 @@ input,textarea{
   border:none;
   background:var(--panel-2);
   color:var(--text);
+  outline: none;
 }
 
 button{
@@ -158,10 +148,12 @@ button{
   cursor:pointer;
   color:#fff;
   background:linear-gradient(135deg,var(--accent),#006fa8);
+  transition: transform 0.2s, filter 0.2s;
 }
 
-button.danger{
-  background:linear-gradient(135deg,var(--danger),#b30000);
+button:hover{
+  transform: scale(1.03);
+  filter: brightness(1.1);
 }
 
 .chat-box{
@@ -171,15 +163,6 @@ button.danger{
 
 .msg{margin-bottom:18px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;}
 .msg small{color:var(--muted)}
-
-.chat-input{
-  display:flex;
-  gap:10px;
-}
-
-.youtube{
-  text-align:center;
-}
 
 .youtube a{
   display:inline-block;
@@ -197,11 +180,12 @@ button.danger{
   padding:16px;
   border-radius:12px;
   overflow-x: auto;
+  border: 1px solid var(--accent);
 }
 
 footer{
   text-align:center;
-  padding:25px;
+  padding:40px 25px;
   color:var(--muted);
 }
 </style>
@@ -230,7 +214,7 @@ footer{
 <section id="chat" class="hidden frange">
   <h2>💬 Consultas</h2>
   <div class="panel chat-box" id="mensajes"></div>
-  <div class="chat-input">
+  <div class="chat-input" style="display:flex; gap:10px; margin-top:15px;">
     <textarea id="mensaje" rows="3" placeholder="Escribí tu consulta..."></textarea>
     <button onclick="enviarMensaje()">Enviar</button>
   </div>
@@ -284,17 +268,12 @@ const auth=firebase.auth();
 const db=firebase.firestore();
 const ADMIN_EMAIL="lisandrosanchez507@gmail.com";
 
-// FUNCIONES DE USUARIO
 function registrar(){
-  auth.createUserWithEmailAndPassword(email.value,password.value)
-  .catch(e=>alert(e.message));
+  auth.createUserWithEmailAndPassword(email.value,password.value).catch(e=>alert(e.message));
 }
-
 function login(){
-  auth.signInWithEmailAndPassword(email.value,password.value)
-  .catch(e=>alert(e.message));
+  auth.signInWithEmailAndPassword(email.value,password.value).catch(e=>alert(e.message));
 }
-
 function logout(){ auth.signOut(); }
 
 function enviarMensaje(){
@@ -307,119 +286,70 @@ function enviarMensaje(){
   mensaje.value="";
 }
 
-function vaciarChat(){
-  if(!confirm("¿Vaciar todo el chat?"))return;
-  db.collection("mensajes").get().then(s=>{
-    s.forEach(d=>d.ref.delete());
-  });
-}
-
-// LÓGICA DE RESPUESTAS ADMIN
 function responderMensaje(idMensaje){
   const texto = document.getElementById("resp_"+idMensaje).value;
   if(!texto.trim()) return;
-
-  db.collection("mensajes").doc(idMensaje)
-    .collection("respuestas")
-    .add({
-      texto: texto,
-      user: auth.currentUser.email,
-      fecha: firebase.firestore.FieldValue.serverTimestamp()
-    });
-
+  db.collection("mensajes").doc(idMensaje).collection("respuestas").add({
+    texto: texto,
+    user: auth.currentUser.email,
+    fecha: firebase.firestore.FieldValue.serverTimestamp()
+  });
   document.getElementById("resp_"+idMensaje).value = "";
 }
 
 function escucharRespuestas(idMensaje, contenedor){
-  db.collection("mensajes")
-    .doc(idMensaje)
-    .collection("respuestas")
-    .orderBy("fecha","asc")
-    .onSnapshot(snap=>{
-      contenedor.innerHTML = "";
-      snap.forEach(doc=>{
-        const r = doc.data();
-        const f = r.fecha ? r.fecha.toDate().toLocaleString() : "";
-        contenedor.innerHTML +=
-          `<div style="margin-left:20px; border-left: 2px solid var(--accent); padding-left:10px; margin-top:5px;">
-            <small><b>${r.user}</b>: ${r.texto} <br><span style="font-size:10px">${f}</span></small>
-          </div>`;
-      });
+  db.collection("mensajes").doc(idMensaje).collection("respuestas").orderBy("fecha","asc").onSnapshot(snap=>{
+    contenedor.innerHTML = "";
+    snap.forEach(doc=>{
+      const r = doc.data();
+      const f = r.fecha ? r.fecha.toDate().toLocaleString() : "";
+      contenedor.innerHTML += `<div style="margin-left:20px; border-left: 2px solid var(--accent); padding-left:10px; margin-top:5px;"><small><b>${r.user}</b>: ${r.texto} <br><span style="font-size:10px">${f}</span></small></div>`;
     });
+  });
 }
 
-// SNAPSHOT PRINCIPAL (MENSAJES)
 db.collection("mensajes").orderBy("fecha","asc").onSnapshot(snap=>{
   mensajes.innerHTML="";
   adminMensajes.innerHTML="";
-
   snap.forEach(doc=>{
     const m=doc.data();
     const f=m.fecha?m.fecha.toDate().toLocaleString():"";
     const contRespId = "resps_"+doc.id;
-
-    const baseHTML = `
-      <div class='msg'>
-        <b>${m.user}</b><br>
-        ${m.texto}<br>
-        <small>${f}</small>
-        <div id="${contRespId}"></div>
-      </div>
-    `;
-
+    const baseHTML = `<div class='msg'><b>${m.user}</b><br>${m.texto}<br><small>${f}</small><div id="${contRespId}"></div></div>`;
     mensajes.innerHTML += baseHTML;
     adminMensajes.innerHTML += baseHTML;
-
-    // Conectar sub-colección de respuestas
     setTimeout(() => {
-        const contUser = document.getElementById(contRespId);
-        if(contUser) escucharRespuestas(doc.id, contUser);
+        const cont = document.getElementById(contRespId);
+        if(cont) escucharRespuestas(doc.id, cont);
     }, 100);
-
     if(auth.currentUser && auth.currentUser.email === ADMIN_EMAIL){
-      adminMensajes.innerHTML += `
-        <div style="margin-bottom:20px">
-          <input id="resp_${doc.id}" placeholder="Escribir respuesta...">
-          <button onclick="responderMensaje('${doc.id}')">Responder</button>
-        </div>
-      `;
+      adminMensajes.innerHTML += `<div style="margin-bottom:20px"><input id="resp_${doc.id}" placeholder="Responder..."><button onclick="responderMensaje('${doc.id}')">Responder</button></div>`;
     }
   });
 });
 
-// ESTADO DE AUTENTICACIÓN
 auth.onAuthStateChanged(user=>{
-  const authSection = document.getElementById("auth");
-  const chatSection = document.getElementById("chat");
-  const adminSection = document.getElementById("admin");
-
   if(user){
-    authSection.classList.add("hidden");
-    chatSection.classList.remove("hidden");
-    if(user.email === ADMIN_EMAIL){
-      adminSection.classList.remove("hidden");
-    } else {
-      adminSection.classList.add("hidden");
-    }
+    document.getElementById("auth").classList.add("hidden");
+    document.getElementById("chat").classList.remove("hidden");
+    if(user.email === ADMIN_EMAIL) document.getElementById("admin").classList.remove("hidden");
   } else {
-    authSection.classList.remove("hidden");
-    chatSection.classList.add("hidden");
-    adminSection.classList.add("hidden");
+    document.getElementById("auth").classList.remove("hidden");
+    document.getElementById("chat").classList.add("hidden");
+    document.getElementById("admin").classList.add("hidden");
   }
 });
 
-// UTILIDADES
 function toggleTheme(){
   document.body.classList.toggle("light");
-  themeBtn.innerText =
-    document.body.classList.contains("light")
-    ? "☀️ Claro"
-    : "🌙 Oscuro";
+  themeBtn.innerText = document.body.classList.contains("light") ? "☀️ Claro" : "🌙 Oscuro";
 }
-
 function copiar(){
   navigator.clipboard.writeText(cmd.innerText);
   alert("Comando copiado");
+}
+function vaciarChat(){
+  if(confirm("¿Vaciar chat?")) db.collection("mensajes").get().then(s=>s.forEach(d=>d.ref.delete()));
 }
 </script>
 </body>
