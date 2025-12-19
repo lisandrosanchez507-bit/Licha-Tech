@@ -1,43 +1,42 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Licha Tech | Preguntas y Respuestas</title>
 
+<!-- FUENTE SATOSHI -->
 <link href="https://fonts.cdnfonts.com/css/satoshi" rel="stylesheet">
 
 <style>
-/* ================= VARIABLES DE TEMA ================= */
 :root{
-  --bg:#0f0f0f;
-  --bg-card:#151515;
+  --bg1:#0b0f14;
+  --bg2:#111c26;
+  --card:#1c1c1c;
   --text:#ffffff;
-  --border:#262626;
   --accent:#00b4ff;
 }
 
 [data-theme="light"]{
-  --bg:#f2f6f9;
-  --bg-card:#ffffff;
-  --text:#0f0f0f;
-  --border:#d0d0d0;
-  --accent:#0077ff;
+  --bg1:#f0f6fb;
+  --bg2:#e4eef8;
+  --card:#ffffff;
+  --text:#111;
+  --accent:#007acc;
 }
 
-/* ================= BODY + FONDO ANIMADO ================= */
+/* BODY CON FONDO ANIMADO */
 body{
   margin:0;
   font-family:'Satoshi', Arial, sans-serif;
   color:var(--text);
-  background:linear-gradient(120deg,#0f0f0f,#121c24,#0f0f0f);
-  background-size:400% 400%;
-  animation:bgmove 15s ease infinite;
-  transition:background .4s,color .4s;
-}
-
-[data-theme="light"] body{
-  background:linear-gradient(120deg,#f2f6f9,#e3ecf5,#f2f6f9);
+  background:
+    radial-gradient(circle at 20% 20%, rgba(0,180,255,.18), transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(0,255,180,.12), transparent 45%),
+    linear-gradient(120deg,var(--bg1),var(--bg2),var(--bg1));
+  background-size:200% 200%;
+  animation:bgmove 18s ease-in-out infinite;
+  transition:.4s;
 }
 
 @keyframes bgmove{
@@ -46,175 +45,113 @@ body{
   100%{background-position:0% 50%}
 }
 
-/* ================= HEADER ================= */
+/* HEADER */
 header{
-  padding:60px 20px;
   text-align:center;
-  border-bottom:1px solid var(--border);
+  padding:50px 20px;
 }
-
 header h1{
-  margin:0;
-  font-size:3.4rem;
-  letter-spacing:6px;
-  font-weight:800;
-  color:var(--text);
-  text-shadow:0 0 30px rgba(0,180,255,.4);
-  animation:glow 2.5s ease-in-out infinite alternate;
-}
-
-@keyframes glow{
-  from{ text-shadow:0 0 15px rgba(0,180,255,.25);}
-  to{ text-shadow:0 0 35px rgba(0,180,255,.7);}
-}
-
-header p{
-  margin-top:12px;
-  letter-spacing:3px;
-  color:var(--accent);
-  font-size:.85rem;
+  font-size:3.5rem;
+  letter-spacing:4px;
   text-transform:uppercase;
+  color:#e9faff;
+  text-shadow:
+    0 0 10px rgba(0,180,255,.8),
+    0 0 40px rgba(0,180,255,.4);
+  animation:pulse 4s infinite;
+}
+@keyframes pulse{
+  0%,100%{opacity:1}
+  50%{opacity:.85}
+}
+header p{
+  opacity:.8;
 }
 
-/* ================= SECCIONES ================= */
+/* SECCIONES */
 section{
   max-width:900px;
   margin:auto;
   padding:40px 20px;
 }
 
-h2{
-  color:var(--accent);
-  margin-bottom:15px;
-}
-
-/* ================= CHAT ================= */
-.chat-box{
-  background:var(--bg-card);
-  border:1px solid var(--border);
+/* CAJAS */
+.chat-box,.admin{
+  background:var(--card);
   border-radius:14px;
   padding:20px;
-  max-height:420px;
-  overflow:auto;
-  margin-bottom:12px;
+  box-shadow:0 0 20px rgba(0,0,0,.4);
 }
 
+/* INPUTS */
+input,textarea{
+  width:100%;
+  background:#2a2a2a;
+  border:none;
+  border-radius:10px;
+  padding:12px;
+  color:#fff;
+  margin-bottom:10px;
+}
+
+/* BOTONES PRO */
+button,.btn{
+  background:linear-gradient(135deg,var(--accent),#007acc);
+  border:none;
+  border-radius:12px;
+  padding:12px 22px;
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+  transition:.2s;
+}
+button:hover,.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(0,180,255,.4);
+}
+
+/* CHAT */
 .chat-input{
   display:flex;
   gap:10px;
 }
-
-/* ================= INPUTS ================= */
-input, textarea{
-  width:100%;
-  padding:14px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:transparent;
-  color:var(--text);
-  transition:.3s;
-}
-
-input:focus, textarea:focus{
-  outline:none;
-  border-color:var(--accent);
-  box-shadow:0 0 10px rgba(0,180,255,.3);
-}
-
-/* ================= BOTONES ================= */
-button{
-  background:transparent;
-  border:1px solid var(--border);
-  padding:14px 22px;
-  border-radius:10px;
-  color:var(--text);
-  font-weight:600;
-  cursor:pointer;
-  transition:.25s ease;
-}
-
-button:hover{
-  border-color:var(--accent);
-  box-shadow:0 0 15px rgba(0,180,255,.4);
-  transform:translateY(-2px);
-}
-
-button:active{
-  transform:scale(.95);
-}
-
 .hidden{display:none}
 
-/* ================= ADMIN ================= */
-.admin{
-  border:2px dashed var(--accent);
-  border-radius:14px;
-  padding:15px;
-  max-height:420px;
-  overflow:auto;
+/* TOGGLE TEMA */
+.toggle{
+  position:fixed;
+  top:15px;
+  right:15px;
 }
 
-/* ================= YOUTUBE ================= */
+/* YOUTUBE */
 .youtube{
   text-align:center;
-  border-top:1px solid var(--border);
 }
 
-.btn-youtube{
-  background:#ff0000;
-  border:none;
-}
-
-.btn-youtube:hover{
-  background:#d90000;
-  box-shadow:0 0 18px rgba(255,0,0,.5);
-}
-
-/* ================= ACTIVACION (NO TOCAR) ================= */
-.activacion pre{
-  background:#0e0e0e;
-  padding:15px;
-  border-radius:10px;
-  overflow:auto;
-}
-
-/* ================= FOOTER ================= */
+/* FOOTER */
 footer{
-  border-top:1px solid var(--border);
   text-align:center;
   padding:20px;
-  color:#777;
-  font-size:.9rem;
-}
-
-/* ================= BOTON TEMA ================= */
-#themeToggle{
-  position:fixed;
-  top:20px;
-  right:20px;
-  padding:12px 16px;
-  border-radius:50px;
-  font-size:14px;
-  background:var(--bg-card);
-  z-index:9999;
+  opacity:.6;
 }
 </style>
 </head>
 
 <body>
 
-<button id="themeToggle">🌙 Oscuro</button>
+<button class="toggle" onclick="toggleTheme()">🌗</button>
 
 <header>
 <h1>Licha Tech</h1>
-<p>Servicio Técnico Informático</p>
+<p>Servicio técnico real · Preguntá y te respondo</p>
 </header>
 
 <section id="authDiv">
 <h2>🔐 Ingresar / Registrarse</h2>
 <div class="chat-box">
-<input id="email" placeholder="Email"><br><br>
-<input id="password" type="password" placeholder="Contraseña"><br><br>
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Contraseña">
 <button onclick="registrar()">Registrarse</button>
 <button onclick="login()">Entrar</button>
 </div>
@@ -222,9 +159,6 @@ footer{
 
 <section id="chat" class="hidden">
 <h2>💬 Preguntas</h2>
-<div style="text-align:right;margin-bottom:15px;">
-<button onclick="cerrarSesion()">Cerrar sesión</button>
-</div>
 <div class="chat-box" id="mensajes"></div>
 <div class="chat-input">
 <textarea id="mensaje" rows="3" placeholder="Escribí tu consulta..."></textarea>
@@ -233,23 +167,19 @@ footer{
 </section>
 
 <section id="admin" class="hidden">
-<h2>🛠 Panel Admin</h2>
+<h2>🧠 Panel Admin</h2>
 <div class="admin" id="adminMensajes"></div>
-<button onclick="vaciarChat()" style="margin-top:15px;">Vaciar chat</button>
 </section>
 
 <section class="youtube">
 <h2>📺 Canal de YouTube</h2>
-<p>Reparaciones reales, optimización y soluciones explicadas.</p>
-<a href="https://www.youtube.com/@LichaTech" target="_blank">
-<button class="btn-youtube">Ir al canal</button>
-</a>
+<a href="https://www.youtube.com/@LichaTech" target="_blank" class="btn">Ir al canal</a>
 </section>
 
 <section class="activacion">
 <h2>🔑 Activación de Windows</h2>
 <ol>
-<li>Copiá el siguiente comando</li>
+<li>Copiá el comando</li>
 <li>Clic derecho en Inicio</li>
 <li>PowerShell (Administrador)</li>
 <li>Pegá y ejecutá</li>
@@ -257,7 +187,10 @@ footer{
 <pre><code>irm https://get.activated.win | iex</code></pre>
 </section>
 
-<footer>© 2025 Licha Tech · Servicio Técnico Informático</footer>
+<footer>© 2025 Licha Tech</footer>
+
+<!-- SONIDO TIC -->
+<audio id="tic" src="https://cdn.pixabay.com/audio/2022/03/15/audio_2c2b7d8f63.mp3"></audio>
 
 <!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -265,20 +198,6 @@ footer{
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
-/* ===== TEMA ===== */
-const toggle=document.getElementById("themeToggle");
-let theme=localStorage.getItem("theme")||"dark";
-document.documentElement.setAttribute("data-theme",theme);
-toggle.innerText=theme==="dark"?"☀️ Claro":"🌙 Oscuro";
-
-toggle.onclick=()=>{
-  theme=theme==="dark"?"light":"dark";
-  document.documentElement.setAttribute("data-theme",theme);
-  localStorage.setItem("theme",theme);
-  toggle.innerText=theme==="dark"?"☀️ Claro":"🌙 Oscuro";
-};
-
-/* ===== FIREBASE ===== */
 const firebaseConfig={
   apiKey:"AIzaSyDPR40KPSX1BXu6nDOrZ2Muj-oyElZ1IQ8",
   authDomain:"licha-tech-ec128.firebaseapp.com",
@@ -292,46 +211,43 @@ const auth=firebase.auth();
 const db=firebase.firestore();
 const ADMIN_EMAIL="lisandrosanchez507@gmail.com";
 
-function registrar(){
-  auth.createUserWithEmailAndPassword(email.value,password.value).catch(e=>alert(e.message));
-}
-function login(){
-  auth.signInWithEmailAndPassword(email.value,password.value).catch(e=>alert(e.message));
-}
-function cerrarSesion(){auth.signOut();}
+const tic=document.getElementById("tic");
+document.addEventListener("click",()=>{tic.currentTime=0;tic.play()});
+document.addEventListener("keydown",()=>{tic.currentTime=0;tic.play()});
+
+function registrar(){auth.createUserWithEmailAndPassword(email.value,password.value)}
+function login(){auth.signInWithEmailAndPassword(email.value,password.value)}
+
 function enviarMensaje(){
-  if(!mensaje.value.trim())return;
+  const t=mensaje.value.trim();
+  if(!t)return;
   db.collection("mensajes").add({
-    texto:mensaje.value,
-    user:auth.currentUser.email,
+    texto:t,
     fecha:new Date(),
-    respuesta:""
+    user:auth.currentUser.email
   });
   mensaje.value="";
 }
-db.collection("mensajes").orderBy("fecha").onSnapshot(s=>{
+
+db.collection("mensajes").orderBy("fecha","asc").onSnapshot(s=>{
   mensajes.innerHTML="";
-  adminMensajes.innerHTML="";
   s.forEach(d=>{
     const m=d.data();
     const f=new Date(m.fecha).toLocaleString();
-    if(auth.currentUser && m.user===auth.currentUser.email){
-      mensajes.innerHTML+=`<p><b>${f}</b><br>${m.texto}</p>`;
-      if(m.respuesta) mensajes.innerHTML+=`<p style="color:#00ff99;margin-left:15px;">Admin: ${m.respuesta}</p>`;
-    }
-    if(auth.currentUser && auth.currentUser.email===ADMIN_EMAIL){
-      adminMensajes.innerHTML+=`
-      <p><b>${m.user}</b> (${f})<br>${m.texto}</p>
-      <input id="r${d.id}">
-      <button onclick="db.collection('mensajes').doc('${d.id}').update({respuesta:document.getElementById('r${d.id}').value})">Responder</button><hr>`;
-    }
+    mensajes.innerHTML+=`<p><b>${m.user}</b> [${f}]<br>${m.texto}</p><hr>`;
   });
 });
+
 auth.onAuthStateChanged(u=>{
   authDiv.classList.toggle("hidden",!!u);
   chat.classList.toggle("hidden",!u);
-  admin.classList.toggle("hidden",!(u && u.email===ADMIN_EMAIL));
+  admin.classList.toggle("hidden",!(u&&u.email===ADMIN_EMAIL));
 });
+
+function toggleTheme(){
+  document.documentElement.dataset.theme =
+    document.documentElement.dataset.theme==="dark"?"light":"dark";
+}
 </script>
 
 </body>
