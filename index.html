@@ -20,7 +20,7 @@
   --shadow:0 20px 40px rgba(0,0,0,.6);
 }
 
-/* ===== MODO CLARO (CORRECCIÓN) ===== */
+/* ===== MODO CLARO ===== */
 body.light{
   --bg-main:#eef3f8;
   --bg-alt:#dde7f2;
@@ -37,18 +37,35 @@ body{
   margin:0;
   font-family:'Satoshi',sans-serif;
   color:var(--text);
-  background:
-    radial-gradient(circle at 15% 20%, rgba(0,180,255,.18), transparent 40%),
-    radial-gradient(circle at 85% 30%, rgba(0,255,180,.12), transparent 45%),
-    linear-gradient(120deg,var(--bg-main),var(--bg-alt),var(--bg-main));
-  background-size:200% 200%;
-  animation:fondoAnimado 22s ease infinite;
+  background-color: var(--bg-main);
+  /* FONDO ANIMADO MEJORADO */
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(0, 180, 255, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(0, 255, 180, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(0, 180, 255, 0.15) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(0, 255, 180, 0.1) 0px, transparent 50%),
+    linear-gradient(125deg, var(--bg-main) 0%, var(--bg-alt) 50%, var(--bg-main) 100%);
+  background-size: 200% 200%;
+  animation: fondoAnimado 15s ease infinite;
+  min-height: 100vh;
 }
 
 @keyframes fondoAnimado{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
+  0%{background-position:0% 0%}
+  50%{background-position:100% 100%}
+  100%{background-position:0% 0%}
+}
+
+/* Efecto de malla tecnológica */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .hidden{display:none}
@@ -152,7 +169,7 @@ button.danger{
   overflow:auto;
 }
 
-.msg{margin-bottom:18px}
+.msg{margin-bottom:18px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;}
 .msg small{color:var(--muted)}
 
 .chat-input{
@@ -179,6 +196,7 @@ button.danger{
   background:#111;
   padding:16px;
   border-radius:12px;
+  overflow-x: auto;
 }
 
 footer{
@@ -236,7 +254,7 @@ footer{
 <section class="activacion frange">
   <h2>🔑 Activación de Windows</h2>
   <ol>
-    <li>Copia el comando y hace clic izquierdo en el icono de windows
+    <li>Copia el comando y hace clic izquierdo en el icono de windows</li>
     <li>Abrí PowerShell como administrador</li>
     <li>Pegá y ejecutá el comando</li>
   </ol>
@@ -251,6 +269,7 @@ footer{
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
+// CONFIGURACIÓN FIREBASE
 const firebaseConfig={
   apiKey:"AIzaSyDPR40KPSX1BXu6nDOrZ2Muj-oyElZ1IQ8",
   authDomain:"licha-tech-ec128.firebaseapp.com",
@@ -265,6 +284,7 @@ const auth=firebase.auth();
 const db=firebase.firestore();
 const ADMIN_EMAIL="lisandrosanchez507@gmail.com";
 
+// FUNCIONES DE USUARIO
 function registrar(){
   auth.createUserWithEmailAndPassword(email.value,password.value)
   .catch(e=>alert(e.message));
@@ -294,57 +314,7 @@ function vaciarChat(){
   });
 }
 
-db.collection("mensajes").orderBy("fecha","asc").onSnapshot(snap=>{
-  mensajes.innerHTML="";
-  adminMensajes.innerHTML="";
-  snap.forEach(doc=>{
-    const m=doc.data();
-    const f=m.fecha?m.fecha.toDate().toLocaleString():"";
-    const html=`<div class='msg'><b>${m.user}</b><br>${m.texto}<br><small>${f}</small></div>`;
-    mensajes.innerHTML+=html;
-    adminMensajes.innerHTML+=html;
-  });
-});
-
-auth.onAuthStateChanged(user=>{
-  const authSection = document.getElementById("auth");
-  const chatSection = document.getElementById("chat");
-  const adminSection = document.getElementById("admin");
-
-  if(user){
-    authSection.classList.add("hidden");
-    chatSection.classList.remove("hidden");
-
-    if(user.email === ADMIN_EMAIL){
-      adminSection.classList.remove("hidden");
-    } else {
-      adminSection.classList.add("hidden");
-    }
-  } else {
-    authSection.classList.remove("hidden");
-    chatSection.classList.add("hidden");
-    adminSection.classList.add("hidden");
-  }
-});
-
-
-function toggleTheme(){
-  document.body.classList.toggle("light");
-  themeBtn.innerText =
-    document.body.classList.contains("light")
-    ? "☀️ Claro"
-    : "🌙 Oscuro";
-}
-
-function copiar(){
-  navigator.clipboard.writeText(cmd.innerText);
-  alert("Comando copiado");
-}
-</script>
-<script>
-// ====== RESPUESTAS ADMIN ↔ CLIENTE ======
-
-// enviar respuesta (solo admin)
+// LÓGICA DE RESPUESTAS ADMIN
 function responderMensaje(idMensaje){
   const texto = document.getElementById("resp_"+idMensaje).value;
   if(!texto.trim()) return;
@@ -360,7 +330,6 @@ function responderMensaje(idMensaje){
   document.getElementById("resp_"+idMensaje).value = "";
 }
 
-// escuchar respuestas por mensaje
 function escucharRespuestas(idMensaje, contenedor){
   db.collection("mensajes")
     .doc(idMensaje)
@@ -372,14 +341,14 @@ function escucharRespuestas(idMensaje, contenedor){
         const r = doc.data();
         const f = r.fecha ? r.fecha.toDate().toLocaleString() : "";
         contenedor.innerHTML +=
-          `<div style="margin-left:15px">
-            <small><b>${r.user}</b>: ${r.texto} (${f})</small>
+          `<div style="margin-left:20px; border-left: 2px solid var(--accent); padding-left:10px; margin-top:5px;">
+            <small><b>${r.user}</b>: ${r.texto} <br><span style="font-size:10px">${f}</span></small>
           </div>`;
       });
     });
 }
 
-// parche visual SIN tocar tu lógica original
+// SNAPSHOT PRINCIPAL (MENSAJES)
 db.collection("mensajes").orderBy("fecha","asc").onSnapshot(snap=>{
   mensajes.innerHTML="";
   adminMensajes.innerHTML="";
@@ -387,7 +356,6 @@ db.collection("mensajes").orderBy("fecha","asc").onSnapshot(snap=>{
   snap.forEach(doc=>{
     const m=doc.data();
     const f=m.fecha?m.fecha.toDate().toLocaleString():"";
-
     const contRespId = "resps_"+doc.id;
 
     const baseHTML = `
@@ -402,17 +370,57 @@ db.collection("mensajes").orderBy("fecha","asc").onSnapshot(snap=>{
     mensajes.innerHTML += baseHTML;
     adminMensajes.innerHTML += baseHTML;
 
-    const cont = document.getElementById(contRespId);
-    escucharRespuestas(doc.id, cont);
+    // Conectar sub-colección de respuestas
+    setTimeout(() => {
+        const contUser = document.getElementById(contRespId);
+        if(contUser) escucharRespuestas(doc.id, contUser);
+    }, 100);
 
     if(auth.currentUser && auth.currentUser.email === ADMIN_EMAIL){
       adminMensajes.innerHTML += `
-        <textarea id="resp_${doc.id}" rows="2" placeholder="Responder..."></textarea>
-        <button onclick="responderMensaje('${doc.id}')">Responder</button>
+        <div style="margin-bottom:20px">
+          <input id="resp_${doc.id}" placeholder="Escribir respuesta...">
+          <button onclick="responderMensaje('${doc.id}')">Responder</button>
+        </div>
       `;
     }
   });
 });
+
+// ESTADO DE AUTENTICACIÓN
+auth.onAuthStateChanged(user=>{
+  const authSection = document.getElementById("auth");
+  const chatSection = document.getElementById("chat");
+  const adminSection = document.getElementById("admin");
+
+  if(user){
+    authSection.classList.add("hidden");
+    chatSection.classList.remove("hidden");
+    if(user.email === ADMIN_EMAIL){
+      adminSection.classList.remove("hidden");
+    } else {
+      adminSection.classList.add("hidden");
+    }
+  } else {
+    authSection.classList.remove("hidden");
+    chatSection.classList.add("hidden");
+    adminSection.classList.add("hidden");
+  }
+});
+
+// UTILIDADES
+function toggleTheme(){
+  document.body.classList.toggle("light");
+  themeBtn.innerText =
+    document.body.classList.contains("light")
+    ? "☀️ Claro"
+    : "🌙 Oscuro";
+}
+
+function copiar(){
+  navigator.clipboard.writeText(cmd.innerText);
+  alert("Comando copiado");
+}
 </script>
 </body>
-  </html>
+</html>
