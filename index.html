@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Licha Tech | Preguntas y Respuestas</title>
+
+<title>Licha Tech · Servicio Técnico Informático</title>
 
 <style>
 /* ================= BASE ================= */
@@ -15,7 +16,7 @@ body{
   overflow-x:hidden;
 }
 
-/* ===== FONDO ANIMADO BIEN VISIBLE ===== */
+/* ===== FONDO ANIMADO VISIBLE ===== */
 body::before,
 body::after{
   content:"";
@@ -26,11 +27,11 @@ body::after{
     radial-gradient(circle at 20% 30%, rgba(0,180,255,.6), transparent 40%),
     radial-gradient(circle at 80% 40%, rgba(0,255,200,.4), transparent 45%),
     radial-gradient(circle at 50% 80%, rgba(0,120,255,.5), transparent 50%);
-  animation:fondo 20s linear infinite;
+  animation:fondo 22s linear infinite;
   filter:blur(120px);
 }
 body::after{
-  animation-duration:35s;
+  animation-duration:38s;
   opacity:.6;
 }
 @keyframes fondo{
@@ -41,17 +42,33 @@ body::after{
 
 /* ================= HEADER ================= */
 header{
-  background:linear-gradient(135deg,#111,#1f1f1f);
-  padding:40px 20px;
+  background:linear-gradient(135deg,#0f0f0f,#1b1b1b);
+  padding:50px 20px;
   text-align:center;
+  border-bottom:1px solid rgba(0,180,255,.2);
 }
 header h1{
   margin:0;
-  font-size:2.6rem;
+  font-size:3rem;
+  letter-spacing:1px;
   color:#00b4ff;
-  text-shadow:0 0 15px rgba(0,180,255,.7);
+  text-shadow:0 0 25px rgba(0,180,255,.8);
 }
-header p{color:#aaa}
+header span{
+  display:block;
+  margin-top:8px;
+  font-size:1rem;
+  color:#9adfff;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+header p{
+  margin-top:15px;
+  color:#aaa;
+  max-width:600px;
+  margin-left:auto;
+  margin-right:auto;
+}
 
 /* ================= SECCIONES ================= */
 section{
@@ -74,6 +91,14 @@ h2{color:#00b4ff}
   max-height:400px;
   overflow:auto;
 }
+.chat-box p{
+  margin:8px 0;
+}
+.chat-meta{
+  font-size:.8rem;
+  color:#8ccfff;
+}
+
 .chat-input{
   display:flex;
   gap:10px;
@@ -89,7 +114,7 @@ textarea,input{
   color:#fff;
 }
 
-/* ================= BOTONES ANIMADOS ================= */
+/* ================= BOTONES ================= */
 button,.btn{
   background:linear-gradient(135deg,#00b4ff,#007bff);
   border:none;
@@ -105,7 +130,7 @@ button:hover,.btn:hover{
   transform:translateY(-3px) scale(1.05);
   box-shadow:0 0 35px rgba(0,180,255,.9);
 }
-button:active,.btn:active{
+button:active{
   transform:scale(.95);
 }
 
@@ -139,8 +164,12 @@ footer{
 <body>
 
 <header>
-<h1>Licha Tech</h1>
-<p>Servicio técnico informático · Preguntá y te respondo</p>
+  <h1>Licha Tech</h1>
+  <span>Servicio Técnico Informático</span>
+  <p>
+    Diagnóstico real, soluciones claras y sin vueltas.  
+    Hacé tu consulta y te respondo personalmente.
+  </p>
 </header>
 
 <section id="authDiv">
@@ -175,7 +204,7 @@ footer{
 <a href="https://www.youtube.com/@LichaTech" target="_blank" class="btn btn-youtube">Ir al canal</a>
 </section>
 
-<!-- ===== NO SE TOCA ===== -->
+<!-- NO SE TOCA -->
 <section class="activacion">
 <h2>🔑 Activación de Windows</h2>
 <ol>
@@ -189,7 +218,7 @@ footer{
 
 <footer>© 2025 Licha Tech · Servicio Técnico Informático</footer>
 
-<!-- ===== FIREBASE ===== -->
+<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -217,21 +246,17 @@ function login(){
   auth.signInWithEmailAndPassword(email.value,password.value)
     .catch(e=>alert(e.message));
 }
+
 function enviarMensaje(){
   if(!mensaje.value.trim())return;
   db.collection("mensajes").add({
     texto:mensaje.value,
     user:auth.currentUser.email,
-    fecha:firebase.firestore.FieldValue.serverTimestamp(),
-    respuesta:""
+    fecha:firebase.firestore.FieldValue.serverTimestamp()
   });
   mensaje.value="";
 }
-function vaciarChat(){
-  db.collection("mensajes").get().then(s=>{
-    s.forEach(d=>d.ref.delete());
-  });
-}
+
 function cerrarSesion(){auth.signOut();}
 
 auth.onAuthStateChanged(u=>{
@@ -246,9 +271,21 @@ db.collection("mensajes").orderBy("fecha")
   adminMensajes.innerHTML="";
   s.forEach(d=>{
     const m=d.data();
-    mensajes.innerHTML+=`<p><b>${m.user}:</b> ${m.texto}</p>`;
+    const f=m.fecha ? new Date(m.fecha.toDate()) : null;
+    const fechaHora=f ? f.toLocaleDateString()+" "+f.toLocaleTimeString() : "";
+    mensajes.innerHTML+=`
+      <p>
+        <strong>${m.user}</strong>
+        <span class="chat-meta"> · ${fechaHora}</span><br>
+        ${m.texto}
+      </p>`;
     if(auth.currentUser && auth.currentUser.email===ADMIN){
-      adminMensajes.innerHTML+=`<p>${m.user}: ${m.texto}</p>`;
+      adminMensajes.innerHTML+=`
+        <p>
+          <strong>${m.user}</strong>
+          <span class="chat-meta"> · ${fechaHora}</span><br>
+          ${m.texto}
+        </p>`;
     }
   });
 });
