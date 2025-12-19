@@ -8,18 +8,49 @@
 <link href="https://fonts.cdnfonts.com/css/satoshi" rel="stylesheet">
 
 <style>
+/* ================= VARIABLES DE TEMA ================= */
+:root{
+  --bg:#0f0f0f;
+  --bg-card:#151515;
+  --text:#ffffff;
+  --border:#262626;
+  --accent:#00b4ff;
+}
+
+[data-theme="light"]{
+  --bg:#f2f6f9;
+  --bg-card:#ffffff;
+  --text:#0f0f0f;
+  --border:#d0d0d0;
+  --accent:#0077ff;
+}
+
+/* ================= BODY + FONDO ANIMADO ================= */
 body{
   margin:0;
   font-family:'Satoshi', Arial, sans-serif;
-  background:#0f0f0f;
-  color:#fff;
+  color:var(--text);
+  background:linear-gradient(120deg,#0f0f0f,#121c24,#0f0f0f);
+  background-size:400% 400%;
+  animation:bgmove 15s ease infinite;
+  transition:background .4s,color .4s;
 }
 
-/* ===== HEADER ===== */
+[data-theme="light"] body{
+  background:linear-gradient(120deg,#f2f6f9,#e3ecf5,#f2f6f9);
+}
+
+@keyframes bgmove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+/* ================= HEADER ================= */
 header{
   padding:60px 20px;
   text-align:center;
-  border-bottom:1px solid #1f1f1f;
+  border-bottom:1px solid var(--border);
 }
 
 header h1{
@@ -27,25 +58,25 @@ header h1{
   font-size:3.4rem;
   letter-spacing:6px;
   font-weight:800;
-  color:#eafaff;
-  text-shadow:0 0 25px rgba(0,180,255,.4);
+  color:var(--text);
+  text-shadow:0 0 30px rgba(0,180,255,.4);
   animation:glow 2.5s ease-in-out infinite alternate;
 }
 
 @keyframes glow{
   from{ text-shadow:0 0 15px rgba(0,180,255,.25);}
-  to{ text-shadow:0 0 30px rgba(0,180,255,.6);}
+  to{ text-shadow:0 0 35px rgba(0,180,255,.7);}
 }
 
 header p{
   margin-top:12px;
   letter-spacing:3px;
-  color:#9adfff;
+  color:var(--accent);
   font-size:.85rem;
   text-transform:uppercase;
 }
 
-/* ===== SECCIONES ===== */
+/* ================= SECCIONES ================= */
 section{
   max-width:900px;
   margin:auto;
@@ -53,15 +84,14 @@ section{
 }
 
 h2{
-  color:#00b4ff;
-  font-weight:600;
+  color:var(--accent);
   margin-bottom:15px;
 }
 
-/* ===== CHAT ===== */
+/* ================= CHAT ================= */
 .chat-box{
-  background:#151515;
-  border:1px solid #262626;
+  background:var(--bg-card);
+  border:1px solid var(--border);
   border-radius:14px;
   padding:20px;
   max-height:420px;
@@ -74,35 +104,37 @@ h2{
   gap:10px;
 }
 
-/* ===== INPUTS ===== */
+/* ================= INPUTS ================= */
 input, textarea{
   width:100%;
   padding:14px;
   border-radius:10px;
-  border:1px solid #2a2a2a;
-  background:#0c0c0c;
-  color:#fff;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text);
+  transition:.3s;
 }
 
 input:focus, textarea:focus{
   outline:none;
-  border-color:#00b4ff;
+  border-color:var(--accent);
+  box-shadow:0 0 10px rgba(0,180,255,.3);
 }
 
-/* ===== BOTONES ===== */
+/* ================= BOTONES ================= */
 button{
-  background:#101010;
-  border:1px solid #2c2c2c;
+  background:transparent;
+  border:1px solid var(--border);
   padding:14px 22px;
   border-radius:10px;
-  color:#fff;
+  color:var(--text);
   font-weight:600;
   cursor:pointer;
   transition:.25s ease;
 }
 
 button:hover{
-  border-color:#00b4ff;
+  border-color:var(--accent);
   box-shadow:0 0 15px rgba(0,180,255,.4);
   transform:translateY(-2px);
 }
@@ -113,19 +145,19 @@ button:active{
 
 .hidden{display:none}
 
-/* ===== ADMIN ===== */
+/* ================= ADMIN ================= */
 .admin{
-  border:2px dashed #00b4ff;
+  border:2px dashed var(--accent);
   border-radius:14px;
   padding:15px;
   max-height:420px;
   overflow:auto;
 }
 
-/* ===== YOUTUBE ===== */
+/* ================= YOUTUBE ================= */
 .youtube{
   text-align:center;
-  border-top:1px solid #1f1f1f;
+  border-top:1px solid var(--border);
 }
 
 .btn-youtube{
@@ -138,7 +170,7 @@ button:active{
   box-shadow:0 0 18px rgba(255,0,0,.5);
 }
 
-/* ===== ACTIVACION (NO TOCAR) ===== */
+/* ================= ACTIVACION (NO TOCAR) ================= */
 .activacion pre{
   background:#0e0e0e;
   padding:15px;
@@ -146,18 +178,32 @@ button:active{
   overflow:auto;
 }
 
-/* ===== FOOTER ===== */
+/* ================= FOOTER ================= */
 footer{
-  border-top:1px solid #1f1f1f;
+  border-top:1px solid var(--border);
   text-align:center;
   padding:20px;
   color:#777;
   font-size:.9rem;
 }
+
+/* ================= BOTON TEMA ================= */
+#themeToggle{
+  position:fixed;
+  top:20px;
+  right:20px;
+  padding:12px 16px;
+  border-radius:50px;
+  font-size:14px;
+  background:var(--bg-card);
+  z-index:9999;
+}
 </style>
 </head>
 
 <body>
+
+<button id="themeToggle">🌙 Oscuro</button>
 
 <header>
 <h1>Licha Tech</h1>
@@ -219,6 +265,20 @@ footer{
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
+/* ===== TEMA ===== */
+const toggle=document.getElementById("themeToggle");
+let theme=localStorage.getItem("theme")||"dark";
+document.documentElement.setAttribute("data-theme",theme);
+toggle.innerText=theme==="dark"?"☀️ Claro":"🌙 Oscuro";
+
+toggle.onclick=()=>{
+  theme=theme==="dark"?"light":"dark";
+  document.documentElement.setAttribute("data-theme",theme);
+  localStorage.setItem("theme",theme);
+  toggle.innerText=theme==="dark"?"☀️ Claro":"🌙 Oscuro";
+};
+
+/* ===== FIREBASE ===== */
 const firebaseConfig={
   apiKey:"AIzaSyDPR40KPSX1BXu6nDOrZ2Muj-oyElZ1IQ8",
   authDomain:"licha-tech-ec128.firebaseapp.com",
@@ -227,80 +287,50 @@ const firebaseConfig={
   messagingSenderId:"232472382052",
   appId:"1:232472382052:web:9fb54fdbfc72f1c310ad71"
 };
-
 firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth();
 const db=firebase.firestore();
 const ADMIN_EMAIL="lisandrosanchez507@gmail.com";
 
-const authDiv=document.getElementById("authDiv");
-const chat=document.getElementById("chat");
-const admin=document.getElementById("admin");
-
 function registrar(){
-  auth.createUserWithEmailAndPassword(email.value,password.value)
-  .catch(e=>alert(e.message));
+  auth.createUserWithEmailAndPassword(email.value,password.value).catch(e=>alert(e.message));
 }
-
 function login(){
-  auth.signInWithEmailAndPassword(email.value,password.value)
-  .catch(e=>alert(e.message));
+  auth.signInWithEmailAndPassword(email.value,password.value).catch(e=>alert(e.message));
 }
-
+function cerrarSesion(){auth.signOut();}
 function enviarMensaje(){
-  const texto=mensaje.value.trim();
-  if(!texto) return;
+  if(!mensaje.value.trim())return;
   db.collection("mensajes").add({
-    texto,
+    texto:mensaje.value,
     user:auth.currentUser.email,
     fecha:new Date(),
     respuesta:""
   });
   mensaje.value="";
 }
-
-db.collection("mensajes").orderBy("fecha").onSnapshot(snapshot=>{
+db.collection("mensajes").orderBy("fecha").onSnapshot(s=>{
   mensajes.innerHTML="";
   adminMensajes.innerHTML="";
-  snapshot.forEach(doc=>{
-    const d=doc.data();
-    const f=new Date(d.fecha);
-    const fecha=f.toLocaleDateString()+" "+f.toLocaleTimeString();
-    if(auth.currentUser && d.user===auth.currentUser.email){
-      mensajes.innerHTML+=`<p><b>${fecha}</b><br>${d.texto}</p>`;
-      if(d.respuesta) mensajes.innerHTML+=`<p style="color:#00ff99;margin-left:15px;">Admin: ${d.respuesta}</p>`;
+  s.forEach(d=>{
+    const m=d.data();
+    const f=new Date(m.fecha).toLocaleString();
+    if(auth.currentUser && m.user===auth.currentUser.email){
+      mensajes.innerHTML+=`<p><b>${f}</b><br>${m.texto}</p>`;
+      if(m.respuesta) mensajes.innerHTML+=`<p style="color:#00ff99;margin-left:15px;">Admin: ${m.respuesta}</p>`;
     }
     if(auth.currentUser && auth.currentUser.email===ADMIN_EMAIL){
       adminMensajes.innerHTML+=`
-      <p><b>${d.user}</b> (${fecha})<br>${d.texto}</p>
-      <input id="r${doc.id}" placeholder="Respuesta">
-      <button onclick="db.collection('mensajes').doc('${doc.id}').update({respuesta:document.getElementById('r${doc.id}').value})">Responder</button>
-      <hr>`;
+      <p><b>${m.user}</b> (${f})<br>${m.texto}</p>
+      <input id="r${d.id}">
+      <button onclick="db.collection('mensajes').doc('${d.id}').update({respuesta:document.getElementById('r${d.id}').value})">Responder</button><hr>`;
     }
   });
 });
-
-function vaciarChat(){
-  if(!confirm("¿Vaciar todo el chat?"))return;
-  db.collection("mensajes").get().then(s=>{
-    s.forEach(d=>d.ref.delete());
-  });
-}
-
-function cerrarSesion(){
-  auth.signOut();
-}
-
-auth.onAuthStateChanged(user=>{
-  if(user){
-    authDiv.classList.add("hidden");
-    chat.classList.remove("hidden");
-    if(user.email===ADMIN_EMAIL) admin.classList.remove("hidden");
-  }else{
-    authDiv.classList.remove("hidden");
-    chat.classList.add("hidden");
-    admin.classList.add("hidden");
-  }
+auth.onAuthStateChanged(u=>{
+  authDiv.classList.toggle("hidden",!!u);
+  chat.classList.toggle("hidden",!u);
+  admin.classList.toggle("hidden",!(u && u.email===ADMIN_EMAIL));
 });
 </script>
 
