@@ -47,7 +47,7 @@ body{
   background-image: linear-gradient(to bottom, var(--bg-main), var(--bg-alt));
 }
 
-/* EFECTO NEBULOSA MEJORADO PARA MÓVIL (Uso de vh/vw fijos) */
+/* ===== NEBULOSA RÁPIDA Y VISIBLE EN TODO DISPOSITIVO ===== */
 .nebula-container {
   position: fixed;
   top: 0; left: 0;
@@ -59,33 +59,35 @@ body{
 .nebula {
   position: absolute;
   filter: blur(60px);
-  opacity: 0.5;
+  opacity: 0.6;
   border-radius: 50%;
   pointer-events: none;
 }
 
 .n1 { 
   width: 150vw; height: 150vw; 
-  background: radial-gradient(circle, rgba(0, 180, 255, 0.3), transparent);
+  background: radial-gradient(circle, rgba(0, 180, 255, 0.35), transparent);
   top: -50vw; left: -50vw;
-  animation: move1 20s infinite alternate linear;
+  /* Animación acelerada a 8s */
+  animation: move1 8s infinite alternate ease-in-out;
 }
 
 .n2 { 
   width: 130vw; height: 130vw; 
-  background: radial-gradient(circle, rgba(0, 255, 180, 0.2), transparent);
+  background: radial-gradient(circle, rgba(0, 255, 180, 0.25), transparent);
   bottom: -40vw; right: -40vw;
-  animation: move2 25s infinite alternate linear;
+  /* Animación acelerada a 10s */
+  animation: move2 10s infinite alternate ease-in-out;
 }
 
 @keyframes move1 {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(30%, 20%); }
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(35%, 25%) scale(1.2); }
 }
 
 @keyframes move2 {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(-30%, -20%); }
+  0% { transform: translate(0, 0) scale(1.2); }
+  100% { transform: translate(-35%, -25%) scale(1); }
 }
 
 body::before {
@@ -113,7 +115,7 @@ body::before {
 
 header{ text-align:center; padding:28px 20px 34px; }
 
-/* TÍTULO AJUSTADO PARA CELULAR */
+/* TÍTULO EN 2 LÍNEAS PARA MÓVIL */
 .title-anim{
   margin:0;
   font-size: 3.2rem;
@@ -127,7 +129,7 @@ header{ text-align:center; padding:28px 20px 34px; }
 @media (max-width: 600px) {
   .title-anim {
     font-size: 2.5rem;
-    white-space: pre-line; /* Permite el salto de línea manual */
+    white-space: pre-line;
   }
 }
 
@@ -135,7 +137,7 @@ section{
   max-width:1000px;
   margin:auto;
   padding:40px 20px;
-  animation: fadeInUp 1s ease-out both;
+  animation: fadeInUp 0.8s ease-out both;
 }
 
 .panel{
@@ -164,7 +166,6 @@ button{
 button:hover{ transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 180, 255, 0.4); }
 
 .chat-box{ max-height:420px; overflow:auto; }
-.msg{ margin-bottom:18px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
 
 .youtube a{
   display:inline-block; margin-top:15px; padding:14px 30px;
@@ -249,6 +250,7 @@ Tech</h1>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
+// Lógica de Firebase (Sin cambios)
 const firebaseConfig={
   apiKey:"AIzaSyDPR40KPSX1BXu6nDOrZ2Muj-oyElZ1IQ8",
   authDomain:"licha-tech-ec128.firebaseapp.com",
