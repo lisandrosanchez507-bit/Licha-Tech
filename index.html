@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Licha Tech | Plataforma Oficial</title>
 
+<!-- FUENTE -->
 <link href="https://fonts.cdnfonts.com/css/satoshi" rel="stylesheet">
 
 <style>
@@ -17,8 +18,8 @@
   --muted:#9aa4af;
   --accent:#00b4ff;
   --danger:#ff3b3b;
+  --shadow:0 20px 40px rgba(0,0,0,.6);
 }
-
 body.light{
   --bg-main:#eef3f8;
   --bg-alt:#dde7f2;
@@ -28,9 +29,7 @@ body.light{
   --muted:#555;
   --accent:#007acc;
 }
-
 *{box-sizing:border-box}
-
 body{
   margin:0;
   font-family:'Satoshi',sans-serif;
@@ -42,35 +41,39 @@ body{
   background-size:200% 200%;
   animation:fondo 22s ease infinite;
 }
-
 @keyframes fondo{
   0%{background-position:0% 50%}
   50%{background-position:100% 50%}
   100%{background-position:0% 50%}
 }
-
 .hidden{display:none}
+.fade-in{
+  opacity:0;
+  transform:translateY(20px);
+  animation:fadeIn .9s ease forwards;
+}
+@keyframes fadeIn{
+  to{opacity:1;transform:none}
+}
 
+/* HEADER */
 .topbar{
   background:rgba(0,0,0,.75);
   backdrop-filter:blur(16px);
   border-bottom:2px solid var(--accent);
-  position:relative;
 }
-
 header{
   text-align:center;
-  padding:30px;
+  padding:32px 20px;
 }
-
 header h1{
   margin:0;
-  font-size:3.5rem;
+  font-size:3.6rem;
+  letter-spacing:6px;
   color:var(--accent);
+  text-shadow:0 0 30px rgba(0,180,255,.7);
 }
-
 header p{color:var(--muted)}
-
 .theme-toggle{
   position:absolute;
   top:20px;
@@ -81,22 +84,24 @@ header p{color:var(--muted)}
   background:transparent;
   color:var(--accent);
   cursor:pointer;
+  font-weight:600;
 }
 
+/* SECCIONES */
 section{
   max-width:1000px;
   margin:auto;
   padding:50px 20px;
 }
-
 h2{color:var(--accent)}
-
 .panel{
   background:var(--panel);
   border-radius:18px;
   padding:24px;
+  box-shadow:var(--shadow);
 }
 
+/* INPUTS */
 input,textarea{
   width:100%;
   padding:14px;
@@ -106,46 +111,36 @@ input,textarea{
   background:var(--panel-2);
   color:var(--text);
 }
-
 textarea{resize:none}
 
+/* BOTONES */
 button{
-  padding:14px 24px;
+  padding:14px 26px;
   border:none;
   border-radius:14px;
-  background:linear-gradient(135deg,var(--accent),#006fa8);
-  color:#fff;
   font-weight:600;
   cursor:pointer;
-  margin-right:6px;
+  color:#fff;
+  background:linear-gradient(135deg,var(--accent),#006fa8);
 }
-
+button:hover{transform:scale(1.03)}
 button.danger{
   background:linear-gradient(135deg,var(--danger),#b30000);
 }
 
+/* CHAT */
 .chat-box{
   max-height:420px;
   overflow:auto;
-  margin-bottom:15px;
 }
+.msg{margin-bottom:18px}
+.msg small{color:var(--muted)}
 
-.msg{
-  margin-bottom:16px;
-}
-
-.msg small{
-  color:var(--muted);
-  font-size:12px;
-}
-
+/* YOUTUBE */
 .youtube{
   background:var(--panel);
-  border-top:2px solid var(--accent);
-  border-bottom:2px solid var(--accent);
   text-align:center;
 }
-
 .youtube a{
   display:inline-block;
   margin-top:15px;
@@ -157,12 +152,12 @@ button.danger{
   font-weight:700;
 }
 
+/* ACTIVACION */
 .activacion{
   background:#000;
-  border-top:2px solid var(--accent);
-  border-bottom:2px solid var(--accent);
+  border-top:3px solid var(--accent);
+  border-bottom:3px solid var(--accent);
 }
-
 .activacion pre{
   background:#111;
   padding:16px;
@@ -170,6 +165,7 @@ button.danger{
   overflow:auto;
 }
 
+/* FOOTER */
 footer{
   text-align:center;
   padding:25px;
@@ -180,15 +176,17 @@ footer{
 
 <body>
 
-<div class="topbar">
-  <button class="theme-toggle" onclick="toggleTheme()">Claro / Oscuro</button>
+<div class="topbar fade-in">
+  <button class="theme-toggle" onclick="toggleTheme()">
+    <span id="themeIcon">🌙</span> <span id="themeText">Oscuro</span>
+  </button>
   <header>
     <h1>Licha Tech</h1>
-    <p>Soporte técnico real · Diagnóstico · Reparación</p>
+    <p>Servicio técnico real · Diagnóstico · Reparación</p>
   </header>
 </div>
 
-<section id="auth">
+<section id="auth" class="fade-in">
   <h2>🔐 Acceso</h2>
   <div class="panel">
     <input id="email" placeholder="Email">
@@ -198,39 +196,35 @@ footer{
   </div>
 </section>
 
-<section id="chat" class="hidden">
+<section id="chat" class="hidden fade-in">
   <h2>💬 Consultas</h2>
-  <button class="danger" onclick="logout()">Cerrar sesión</button>
   <div class="panel chat-box" id="mensajes"></div>
   <textarea id="mensaje" rows="3" placeholder="Escribí tu consulta..."></textarea>
   <button onclick="enviarMensaje()">Enviar</button>
+  <button class="danger" onclick="logout()">Cerrar sesión</button>
 </section>
 
-<section id="admin" class="hidden">
-  <h2> Panel Admin</h2>
-  <button class="danger" onclick="vaciarChat()">Vaciar chat</button>
+<section id="admin" class="hidden fade-in">
+  <h2>🛠 Panel Admin</h2>
   <div class="panel" id="adminMensajes"></div>
+  <button class="danger" onclick="vaciarChat()">Vaciar chat</button>
 </section>
 
-<section class="youtube">
+<section class="youtube fade-in">
   <h2>📺 Canal de YouTube</h2>
-  <p>Reparaciones reales, optimización y soluciones.</p>
+  <p>Reparaciones reales y soluciones sin humo.</p>
   <a href="https://www.youtube.com/@LichaTech" target="_blank">Ir al canal</a>
 </section>
 
-<section class="activacion">
+<section class="activacion fade-in">
   <h2>🔑 Activación de Windows</h2>
-  <ol>
-    <li>Copiá el comando</li>
-    <li>Abrí PowerShell como administrador</li>
-    <li>Pegá y ejecutá</li>
-  </ol>
   <pre><code id="cmd">irm https://get.activated.win | iex</code></pre>
   <button onclick="copiar()">Copiar comando</button>
 </section>
 
-<footer>© 2025 Licha Tech · Plataforma oficial</footer>
+<footer>© 2025 Licha Tech</footer>
 
+<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -239,20 +233,21 @@ footer{
 firebase.initializeApp({
   apiKey:"AIzaSyDPR40KPSX1BXu6nDOrZ2Muj-oyElZ1IQ8",
   authDomain:"licha-tech-ec128.firebaseapp.com",
-  projectId:"licha-tech-ec128",
-  storageBucket:"licha-tech-ec128.appspot.com",
-  messagingSenderId:"232472382052",
-  appId:"1:232472382052:web:9fb54fdbfc72f1c310ad71"
+  projectId:"licha-tech-ec128"
 });
-
 const auth=firebase.auth();
 const db=firebase.firestore();
-const ADMIN_EMAIL="lisandrosanchez507@gmail.com";
+const ADMIN="lisandrosanchez507@gmail.com";
 
-function registrar(){auth.createUserWithEmailAndPassword(email.value,password.value).catch(e=>alert(e.message))}
-function login(){auth.signInWithEmailAndPassword(email.value,password.value).catch(e=>alert(e.message))}
-function logout(){auth.signOut()}
-
+function registrar(){
+  auth.createUserWithEmailAndPassword(email.value,password.value)
+  .catch(e=>alert(e.message));
+}
+function login(){
+  auth.signInWithEmailAndPassword(email.value,password.value)
+  .catch(e=>alert(e.message));
+}
+function logout(){auth.signOut();}
 function enviarMensaje(){
   if(!mensaje.value.trim())return;
   db.collection("mensajes").add({
@@ -262,35 +257,38 @@ function enviarMensaje(){
   });
   mensaje.value="";
 }
-
-db.collection("mensajes").orderBy("fecha","asc").onSnapshot(snap=>{
-  mensajes.innerHTML="";
-  adminMensajes.innerHTML="";
-  snap.forEach(doc=>{
-    const m=doc.data();
-    const fecha=m.fecha?m.fecha.toDate().toLocaleString("es-AR"):"";
-    const html=`<div class="msg"><b>${m.user}</b><br>${m.texto}<br><small>${fecha}</small></div>`;
-    mensajes.innerHTML+=html;
-    adminMensajes.innerHTML+=html;
-  });
-});
-
-auth.onAuthStateChanged(u=>{
-  auth.classList.toggle("hidden",!!u);
-  chat.classList.toggle("hidden",!u);
-  admin.classList.toggle("hidden",!(u&&u.email===ADMIN_EMAIL));
-});
-
 function vaciarChat(){
-  if(!confirm("Borrar todo el chat?"))return;
+  if(!confirm("Vaciar todo el chat?"))return;
   db.collection("mensajes").get().then(s=>{
     s.forEach(d=>d.ref.delete());
   });
 }
-
-function toggleTheme(){document.body.classList.toggle("light")}
-function copiar(){navigator.clipboard.writeText(cmd.innerText);alert("Copiado")}
+db.collection("mensajes").orderBy("fecha")
+.onSnapshot(s=>{
+  mensajes.innerHTML="";
+  adminMensajes.innerHTML="";
+  s.forEach(d=>{
+    const m=d.data();
+    const f=m.fecha?m.fecha.toDate().toLocaleString("es-AR"):"";
+    const html=`<div class="msg"><b>${m.user}</b><br>${m.texto}<br><small>${f}</small></div>`;
+    mensajes.innerHTML+=html;
+    adminMensajes.innerHTML+=html;
+  });
+});
+auth.onAuthStateChanged(u=>{
+  auth.classList.toggle("hidden",!!u);
+  chat.classList.toggle("hidden",!u);
+  admin.classList.toggle("hidden",!(u&&u.email===ADMIN));
+});
+function toggleTheme(){
+  document.body.classList.toggle("light");
+  themeIcon.textContent=document.body.classList.contains("light")?"☀️":"🌙";
+  themeText.textContent=document.body.classList.contains("light")?"Claro":"Oscuro";
+}
+function copiar(){
+  navigator.clipboard.writeText(cmd.innerText);
+  alert("Copiado");
+}
 </script>
-
 </body>
 </html>
